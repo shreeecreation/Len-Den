@@ -1,14 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:merokarobar/EditData/Service/blcprovider.dart';
 import 'package:merokarobar/Home/bloc/list_bloc.dart';
+import 'package:provider/provider.dart';
 import 'Routes/routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [ChangeNotifierProvider(create: (_) => BlcProvider())], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

@@ -27,7 +27,7 @@ class _EditReceivedState extends State<EditReceived> {
 
   TextEditingController address = TextEditingController();
 
-  final formGlobalKey = GlobalKey<FormState>();
+  final formGlobalKeyedit = GlobalKey<FormState>();
   @override
   void initState() {
     EditDatabaseHelper.initDatabase(widget.username);
@@ -57,9 +57,15 @@ class _EditReceivedState extends State<EditReceived> {
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
                     onPressed: () async {
-                      var price = widget.mode == 1 ? widget.totalblc + int.parse(openingBlc.text) : widget.totalblc - int.parse(openingBlc.text);
-                      if (formGlobalKey.currentState!.validate()) {
-                        formGlobalKey.currentState!.save();
+                      if (formGlobalKeyedit.currentState!.validate()) {
+                        formGlobalKeyedit.currentState!.save();
+                        var price = widget.mode == 1
+                            ? widget.modeString == "Receiving"
+                                ? widget.totalblc - int.parse(openingBlc.text)
+                                : widget.totalblc + int.parse(openingBlc.text)
+                            : widget.modeString == "Outgoing"
+                                ? widget.totalblc - int.parse(openingBlc.text)
+                                : widget.totalblc + int.parse(openingBlc.text);
                         DateTime now = DateTime.now();
                         String formattedDate = DateFormat('MMMM d , y – kk:mm a').format(now);
                         await EditDatabaseHelper.instance.add(
@@ -72,8 +78,8 @@ class _EditReceivedState extends State<EditReceived> {
                                 totalblc: price),
                             widget.username);
                         DatabaseHelper.intialBlc(widget.model["id"], price);
+                        Get.off(const Home());
                       }
-                      Get.off(const Home());
                     },
                     child: const Text("Save")),
               ),
@@ -109,17 +115,18 @@ class _EditReceivedState extends State<EditReceived> {
                       children: [
                         const Text("Total Cash Received", style: TextStyle(fontSize: 16)),
                         Form(
-                          key: formGlobalKey,
+                          key: formGlobalKeyedit,
                           child: SizedBox(
                               height: 60,
                               width: MediaQuery.of(context).size.width / 2.5,
                               child: TextFormField(
                                   cursorColor: Colors.black,
                                   controller: openingBlc,
-                                  validator: (value) {
-                                    if (value == "") {
-                                      return 'Add a valid amount';
+                                  validator: (text) {
+                                    if (text == null || text.isEmpty) {
+                                      return 'Enter valid amount';
                                     }
+
                                     return null;
                                   },
                                   keyboardType: TextInputType.number,

@@ -63,6 +63,7 @@ class EditDatabaseHelper {
 
     String path = join(appStorage!.path, '$databasepath.db');
     databaseFactory.deleteDatabase(path);
-    print("deleted");
   }
+
+  static void getincome() async {}
 }

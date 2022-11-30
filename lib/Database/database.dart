@@ -37,6 +37,16 @@ class DatabaseHelper {
       ''');
   }
 
+  static Future<List<Map<String, Object?>>> totalblc() async {
+    Database db = await instance.database;
+    return await db.rawQuery('SELECT totalblc FROM groceriess WHERE mode = 1');
+  }
+
+  static Future<List<Map<String, Object?>>> paidblc() async {
+    Database db = await instance.database;
+    return await db.rawQuery('SELECT totalblc FROM groceriess WHERE mode = 0');
+  }
+
   Future<List<PartyModel>> getPartyName() async {
     Database db = await instance.database;
     var groceries = await db.query('groceriess', orderBy: 'name');
@@ -59,16 +69,9 @@ class DatabaseHelper {
     return await db.rawUpdate('UPDATE groceriess SET totalblc = $balance  where id = $id ');
   }
 
-  static Future<List<Map<String, dynamic>>> totalblc() async {
-    Database db = await instance.database;
-    return await db.rawQuery('SELECT totalblc FROM groceriess WHERE mode = 1');
-  }
-
   static void deleteDatabase() async {
     final appStorage = await getExternalStorageDirectory();
-
     String path = join(appStorage!.path, 'groceriess.db');
     databaseFactory.deleteDatabase(path);
-    print("deleted");
   }
 }

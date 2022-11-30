@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
+import 'package:merokarobar/EditData/Service/blcprovider.dart';
 import 'package:merokarobar/Home/Service/expandablefloating.dart';
 import 'package:merokarobar/Home/bloc/list_bloc.dart';
 import 'package:merokarobar/Theme/theme.dart';
@@ -20,6 +21,11 @@ class _HomeState extends State<Home> {
   List<PartyModel> foundUsers = [];
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BlcProvider>().gettotalblc();
+      context.read<BlcProvider>().getpaidblc();
+    });
+
     context.read<ListBloc>().add(ListfetchingEvent());
     Future.delayed(const Duration(seconds: 1), () {
       context.read<ListBloc>().add(ListfetchedEvent());
@@ -30,38 +36,28 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: ExpandableFabClass(
-          distanceBetween: 80.0,
-          subChildren: [
-            ElevatedButton(
+        floatingActionButton: ExpandableFabClass(distanceBetween: 80.0, subChildren: [
+          ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               onPressed: () {
                 Navigator.pushNamed(context, "addtodo");
               },
-              child: const Text("Add Receiving"),
-            ),
-            ElevatedButton(
+              child: const Text("Add Receiving")),
+          ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: () {
                 Navigator.pushNamed(context, "addtodoout");
               },
-              child: const Text("Add Outgoing"),
-            ),
-          ],
-        ),
-        appBar: AppBar(
-          backgroundColor: CTheme.kPrimaryColor,
-          elevation: 0,
-          title: const Text("Shree Krishna Shrestha"),
-          actions: [
-            GestureDetector(
-                onTap: () {
-                  DatabaseHelper.deleteDatabase();
-                },
-                child: const Icon(Icons.sync)),
-            const SizedBox(width: 20)
-          ],
-        ),
+              child: const Text("Add Outgoing"))
+        ]),
+        appBar: AppBar(backgroundColor: CTheme.kPrimaryColor, elevation: 0, title: const Text("Shree Krishna Shrestha"), actions: [
+          GestureDetector(
+              onTap: () {
+                DatabaseHelper.deleteDatabase();
+              },
+              child: const Icon(Icons.sync)),
+          const SizedBox(width: 20)
+        ]),
         drawer: const Drawer(),
         body: SingleChildScrollView(
           child: Column(
@@ -91,9 +87,10 @@ class _HomeState extends State<Home> {
                                       Image.asset("assets/Images/incoming.png", height: 45),
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: const [
-                                          Text("Rs. 0", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                          Text("Incoming", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54)),
+                                        children: [
+                                          Text(context.watch<BlcProvider>().totalblc.toString(),
+                                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                                          const Text("Incoming", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54)),
                                         ],
                                       ),
                                     ],
@@ -115,9 +112,10 @@ class _HomeState extends State<Home> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                       Image.asset("assets/Images/outgoing.png", height: 45),
-                                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
-                                        Text("Rs. 0", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                        Text("Outgoing", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54)),
+                                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                        Text(context.watch<BlcProvider>().paidblc.toString(),
+                                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                                        const Text("Outgoing", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54)),
                                       ])
                                     ])),
                                 const SizedBox(height: 5),

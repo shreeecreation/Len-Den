@@ -17,7 +17,6 @@ class EditParty extends StatelessWidget {
     var phone = model["phone"];
     var mode = model["mode"];
     var finalName = name.toString().removeAllWhitespace;
-    print(finalName);
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -40,7 +39,7 @@ class EditParty extends StatelessWidget {
                         onPressed: () {
                           final finalName = name.toString().replaceAll(' ', "");
                           Navigator.pushReplacementNamed(context, "editr",
-                              arguments: {"username": finalName, "model": model, "mode": 1, "modeString": "Receiving", "totalblc": totalblc});
+                              arguments: {"username": finalName, "model": model, "mode": mode, "modeString": "Receiving", "totalblc": totalblc});
                         },
                         style: TextButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
                         child: const Text("Received", style: TextStyle(fontSize: 18, color: Colors.white)))),
@@ -52,7 +51,7 @@ class EditParty extends StatelessWidget {
                         onPressed: () {
                           final finalName = name.toString().replaceAll(' ', "");
                           Navigator.pushReplacementNamed(context, "editr",
-                              arguments: {"username": finalName, "model": model, "mode": 0, "modeString": "Outgoing", "totalblc": totalblc});
+                              arguments: {"username": finalName, "model": model, "mode": mode, "modeString": "Outgoing", "totalblc": totalblc});
                         },
                         style: TextButton.styleFrom(backgroundColor: Colors.red),
                         child: const Text("Outgoing", style: TextStyle(fontSize: 18, color: Colors.white)))),
