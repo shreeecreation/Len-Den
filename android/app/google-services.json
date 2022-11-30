@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "544843042461",
+    "project_id": "karobar-715ac",
+    "storage_bucket": "karobar-715ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544843042461:android:af28147d443e70de584e74",
+        "android_client_info": {
+          "package_name": "com.example.merokarobar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544843042461-cbt2fg5hlknam7295fnhvvaih21cims2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqeFsDiQ8pAgZyIn9XHhFi8MYixnemfzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544843042461-cbt2fg5hlknam7295fnhvvaih21cims2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
