@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
@@ -90,6 +91,9 @@ class AddTodosOut extends StatelessWidget {
                             height: 50,
                             width: MediaQuery.of(context).size.width / 2.5,
                             child: TextFormField(
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                                ], // O
                                 cursorColor: Colors.black,
                                 controller: openingBlc,
                                 keyboardType: TextInputType.number,
