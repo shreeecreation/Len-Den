@@ -16,6 +16,7 @@ class AddTodos extends StatelessWidget {
   TextEditingController openingBlc = TextEditingController();
   TextEditingController address = TextEditingController();
   final formGlobalKey = GlobalKey<FormState>();
+  final formGlobalKey2 = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +51,9 @@ class AddTodos extends StatelessWidget {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
         onPressed: () async {
-          if (formGlobalKey.currentState!.validate()) {
+          if (formGlobalKey.currentState!.validate() && formGlobalKey2.currentState!.validate()) {
             formGlobalKey.currentState!.save();
+            formGlobalKey2.currentState!.save();
             DateTime now = DateTime.now();
             String formattedDate = DateFormat('MMMM d , y – kk:mm a').format(now);
             await DatabaseHelper.instance.add(PartyModel(
@@ -78,6 +80,8 @@ class AddTodos extends StatelessWidget {
   }
 
   Container balance(BuildContext context) {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('y – kk:mm a').format(now);
     return Container(
       color: Colors.black12,
       child: Column(
@@ -101,27 +105,39 @@ class AddTodos extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        SizedBox(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: TextFormField(
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
-                                ], // O
-                                cursorColor: Colors.black,
-                                controller: openingBlc,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    filled: true,
-                                    fillColor: Color.fromARGB(31, 128, 128, 128),
-                                    hintText: 'Enter Amount',
-                                    hintStyle: TextStyle(fontSize: 16)))),
+                        Form(
+                          key: formGlobalKey2,
+                          child: SizedBox(
+                              height: 60,
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              child: TextFormField(
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                                  ],
+                                  validator: (text) {
+                                    if (text == null || text.isEmpty) {
+                                      return 'Error !!!';
+                                    }
+
+                                    return null;
+                                  }, // O
+                                  cursorColor: Colors.black,
+                                  controller: openingBlc,
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      filled: true,
+                                      fillColor: Color.fromARGB(31, 128, 128, 128),
+                                      hintText: 'Enter Amount',
+                                      hintStyle: TextStyle(fontSize: 16)))),
+                        ),
                         const SizedBox(width: 20),
                         SizedBox(
-                            height: 50,
+                            height: 60,
                             width: MediaQuery.of(context).size.width / 2.5,
                             child: TextFormField(
+                                readOnly: true,
+                                initialValue: formattedDate,
                                 cursorColor: Colors.black,
                                 decoration: const InputDecoration(
                                     border: InputBorder.none,
@@ -196,6 +212,7 @@ class AddTodos extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                          textCapitalization: TextCapitalization.words,
                           controller: partyName,
                           cursorColor: Colors.black,
                           validator: (text) {
@@ -222,12 +239,17 @@ class AddTodos extends StatelessWidget {
                             if (text == null || text.isEmpty) {
                               return 'Phone Number can\'t be empty';
                             }
+                            if (text.length <= 9) {
+                              return 'Enter a valid phone number';
+                            }
 
                             return null;
                           },
+                          maxLength: 10,
                           cursorColor: Colors.black,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
+                              counterText: "",
                               border: InputBorder.none,
                               filled: true,
                               fillColor: Color.fromARGB(31, 128, 128, 128),

@@ -47,7 +47,7 @@ class _EditReceivedState extends State<EditReceived> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Padding(
-                  padding: EdgeInsets.all(8.0), child: Text("Party Information", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600))),
+                  padding: EdgeInsets.all(8.0), child: Text("Party Information", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
               widthLongTextField(context),
               balance(context),
               const SizedBox(height: 20),

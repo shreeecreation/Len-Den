@@ -20,8 +20,6 @@ class _HomeState extends State<Home> {
   List<PartyModel> foundUsers = [];
   @override
   void initState() {
-    var totalblc = DatabaseHelper.totalblc();
-    print(totalblc.then((value) => print(value)));
     context.read<ListBloc>().add(ListfetchingEvent());
     Future.delayed(const Duration(seconds: 1), () {
       context.read<ListBloc>().add(ListfetchedEvent());
