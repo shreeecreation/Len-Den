@@ -34,7 +34,6 @@ class _EditReceivedState extends State<EditReceived> {
     super.initState();
   }
 
-  // @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,37 +51,42 @@ class _EditReceivedState extends State<EditReceived> {
               balance(context),
               const SizedBox(height: 20),
               SizedBox(
-                width: MediaQuery.of(context).size.width - 10,
-                height: 45,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
-                    onPressed: () async {
-                      if (formGlobalKeyedit.currentState!.validate()) {
-                        formGlobalKeyedit.currentState!.save();
-                        var price = widget.mode == 1
-                            ? widget.modeString == "Receiving"
-                                ? widget.totalblc - int.parse(openingBlc.text)
-                                : widget.totalblc + int.parse(openingBlc.text)
-                            : widget.modeString == "Outgoing"
-                                ? widget.totalblc - int.parse(openingBlc.text)
-                                : widget.totalblc + int.parse(openingBlc.text);
-                        DateTime now = DateTime.now();
-                        String formattedDate = DateFormat('MMMM d , y – kk:mm a').format(now);
-                        await EditDatabaseHelper.instance.add(
-                            EditModel(
-                                blc: int.parse(openingBlc.text),
-                                date: formattedDate,
-                                mode: widget.mode == 1 ? 1 : 0,
-                                name: widget.model["name"],
-                                initialblc: widget.model["blc"],
-                                totalblc: price),
-                            widget.username);
-                        DatabaseHelper.intialBlc(widget.model["id"], price);
-                        Get.off(const Home());
-                      }
-                    },
-                    child: const Text("Save")),
-              ),
+                  width: MediaQuery.of(context).size.width - 10,
+                  height: 45,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
+                      onPressed: () async {
+                        if (formGlobalKeyedit.currentState!.validate()) {
+                          formGlobalKeyedit.currentState!.save();
+                          var price = widget.mode == 1
+                              ? widget.modeString == "Receiving"
+                                  ? widget.totalblc - int.parse(openingBlc.text)
+                                  : widget.totalblc + int.parse(openingBlc.text)
+                              : widget.modeString == "Outgoing"
+                                  ? widget.totalblc - int.parse(openingBlc.text)
+                                  : widget.totalblc + int.parse(openingBlc.text);
+                          DateTime now = DateTime.now();
+                          String formattedDate = DateFormat('MMMM d , y – kk:mm a').format(now);
+                          await EditDatabaseHelper.instance.add(
+                              EditModel(
+                                  blc: int.parse(openingBlc.text),
+                                  date: formattedDate,
+                                  mode: widget.mode == 1
+                                      ? widget.modeString == "Receiving"
+                                          ? 1
+                                          : 0
+                                      : widget.modeString == "Outgoing"
+                                          ? 0
+                                          : 1,
+                                  name: widget.model["name"],
+                                  initialblc: widget.model["blc"],
+                                  totalblc: price),
+                              widget.username);
+                          DatabaseHelper.intialBlc(widget.model["id"], price);
+                          Get.off(const Home());
+                        }
+                      },
+                      child: const Text("Save"))),
             ],
           ),
         ));
@@ -95,55 +99,47 @@ class _EditReceivedState extends State<EditReceived> {
         children: [
           const SizedBox(height: 20),
           Container(
-            color: Colors.white,
-            child: Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: ExpansionTile(
-                initiallyExpanded: true,
-                title: const Text(
-                  "Add Balance",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
-                ),
-                textColor: Colors.black,
-                iconColor: Colors.black,
-                trailing: const Icon(Icons.add),
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text("Total Cash Received", style: TextStyle(fontSize: 16)),
-                        Form(
-                          key: formGlobalKeyedit,
-                          child: SizedBox(
-                              height: 60,
-                              width: MediaQuery.of(context).size.width / 2.5,
-                              child: TextFormField(
-                                  cursorColor: Colors.black,
-                                  controller: openingBlc,
-                                  validator: (text) {
-                                    if (text == null || text.isEmpty) {
-                                      return 'Enter valid amount';
-                                    }
-
-                                    return null;
-                                  },
-                                  keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      filled: true,
-                                      fillColor: Color.fromARGB(31, 128, 128, 128),
-                                      hintText: 'Enter Amount',
-                                      hintStyle: TextStyle(fontSize: 16)))),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+              color: Colors.white,
+              child: Theme(
+                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
+                      initiallyExpanded: true,
+                      title: const Text(
+                        "Add Balance",
+                        style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+                      ),
+                      textColor: Colors.black,
+                      iconColor: Colors.black,
+                      trailing: const Icon(Icons.add),
+                      children: <Widget>[
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                              const Text("Total Cash Received", style: TextStyle(fontSize: 16)),
+                              Form(
+                                key: formGlobalKeyedit,
+                                child: SizedBox(
+                                    height: 60,
+                                    width: MediaQuery.of(context).size.width / 2.5,
+                                    child: TextFormField(
+                                        cursorColor: Colors.black,
+                                        controller: openingBlc,
+                                        validator: (text) {
+                                          if (text == null || text.isEmpty) {
+                                            return 'Enter valid amount';
+                                          }
+                                          return null;
+                                        },
+                                        keyboardType: TextInputType.number,
+                                        decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            filled: true,
+                                            fillColor: Color.fromARGB(31, 128, 128, 128),
+                                            hintText: 'Enter Amount',
+                                            hintStyle: TextStyle(fontSize: 16)))),
+                              )
+                            ]))
+                      ]))),
           const SizedBox(height: 20),
         ],
       ),

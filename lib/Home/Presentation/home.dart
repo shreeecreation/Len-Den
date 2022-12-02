@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:get/get.dart' as gets;
+import 'package:merokarobar/Add%20Todos/Presentation/addtodos.dart';
+import 'package:merokarobar/Add%20Todos/Presentation/addtodosoutgoing.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
-import 'package:merokarobar/Home/Service/expandablefloating.dart';
+import 'package:merokarobar/Expenses/expenses.dart';
 import 'package:merokarobar/Home/bloc/list_bloc.dart';
 import 'package:merokarobar/Theme/theme.dart';
 
@@ -25,7 +29,6 @@ class _HomeState extends State<Home> {
       context.read<BlcProvider>().gettotalblc();
       context.read<BlcProvider>().getpaidblc();
     });
-
     context.read<ListBloc>().add(ListfetchingEvent());
     Future.delayed(const Duration(seconds: 1), () {
       context.read<ListBloc>().add(ListfetchedEvent());
@@ -36,20 +39,45 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: ExpandableFabClass(distanceBetween: 80.0, subChildren: [
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-              onPressed: () {
-                Navigator.pushNamed(context, "addtodo");
-              },
-              child: const Text("Add Receiving")),
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              onPressed: () {
-                Navigator.pushNamed(context, "addtodoout");
-              },
-              child: const Text("Add Outgoing"))
-        ]),
+        floatingActionButton: SpeedDial(
+          animatedIcon: AnimatedIcons.add_event,
+          backgroundColor: Colors.green[400],
+          overlayOpacity: 0.3,
+          overlayColor: Colors.green[400],
+          activeIcon: Icons.add,
+          children: [
+            SpeedDialChild(
+                child: const Icon(Icons.add),
+                label: "Add Incoming",
+                labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                labelBackgroundColor: const Color.fromARGB(255, 137, 238, 159),
+                backgroundColor: Colors.green,
+                onTap: () {
+                                    gets.Get.to(AddTodos(), transition: gets.Transition.fadeIn, duration: const Duration(milliseconds: 200));
+
+                }),
+            SpeedDialChild(
+                child: const Icon(Icons.add),
+                label: "Add Outgoing",
+                labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                labelBackgroundColor: const Color.fromARGB(255, 255, 161, 160),
+                backgroundColor: Colors.green,
+                onTap: () {
+                  gets.Get.to(AddTodosOut(), transition: gets.Transition.rightToLeft, duration: const Duration(milliseconds: 500));
+
+                }),
+            SpeedDialChild(
+                child: const Icon(Icons.add),
+                label: "Add Expenses",
+                labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                labelBackgroundColor: const Color.fromARGB(255, 255, 161, 160),
+                backgroundColor: Colors.green,
+                onTap: () {
+                  // Get.toNamed("addexpenses",transition: );
+                  gets.Get.to(const AddExpenses(), transition: gets.Transition.leftToRight, duration: const Duration(milliseconds: 500));
+                })
+          ],
+        ),
         appBar: AppBar(backgroundColor: CTheme.kPrimaryColor, elevation: 0, title: const Text("Shree Krishna Shrestha"), actions: [
           GestureDetector(
               onTap: () {
@@ -67,6 +95,7 @@ class _HomeState extends State<Home> {
                 color: CTheme.kPrimaryColor,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -115,7 +144,7 @@ class _HomeState extends State<Home> {
                                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                         Text(context.watch<BlcProvider>().paidblc.toString(),
                                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                        const Text("Outgoing", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54)),
+                                        const Text("Outgoing", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54))
                                       ])
                                     ])),
                                 const SizedBox(height: 5),
@@ -123,7 +152,9 @@ class _HomeState extends State<Home> {
                             )),
                       ],
                     ),
-                    Container(color: CTheme.kPrimaryColor, height: 30, width: 100, child: const Text(""))
+                    Container(color: CTheme.kPrimaryColor, height: 30, width: 100, child: const Text("")),
+                    reminderrow(),
+                    Container(color: CTheme.kPrimaryColor, height: 20, width: 100, child: const Text("")),
                   ],
                 ),
               ),
@@ -180,6 +211,44 @@ class _HomeState extends State<Home> {
             ],
           ),
         ));
+  }
+
+  Row reminderrow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 00),
+          child: SizedBox(
+            width: 150,
+            height: 50,
+            child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: Colors.white),
+                child: Row(children: const [
+                  Text("Reminders", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  SizedBox(width: 10),
+                  Icon(Icons.calendar_month_outlined, color: Colors.black)
+                ])),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 00),
+          child: SizedBox(
+            width: 150,
+            height: 50,
+            child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: Colors.white),
+                child: Row(children: const [
+                  Text("Expenses", style: TextStyle(color: Colors.black, fontSize: 16)),
+                  SizedBox(width: 10),
+                  Icon(Icons.shopping_cart, color: Colors.black)
+                ])),
+          ),
+        ),
+      ],
+    );
   }
 
   ListView partyListView() {
@@ -245,3 +314,24 @@ class _HomeState extends State<Home> {
     });
   }
 }
+      //  ElevatedButton(
+      //         style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+      //         onPressed: () {
+      //           Navigator.pushNamed(context, "addtodo");
+      //         },
+      //         child: const Text("Add Receiving")),
+      //     Padding(
+      //       padding: const EdgeInsets.only(top: 18),
+      //       child: ElevatedButton(
+      //           style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+      //           onPressed: () {
+      //             Navigator.pushNamed(context, "addtodoout");
+      //           },
+      //           child: const Text("Add Outgoing")),
+      //     ),
+      //     ElevatedButton(
+      //         style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+      //         onPressed: () {
+      //           Navigator.pushNamed(context, "addtodo");
+      //         },
+      //         child: const Text("Add Expenses")),

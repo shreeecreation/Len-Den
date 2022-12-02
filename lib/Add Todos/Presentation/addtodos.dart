@@ -234,6 +234,9 @@ class AddTodos extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                          ],
                           controller: phoneNo,
                           validator: (text) {
                             if (text == null || text.isEmpty) {
