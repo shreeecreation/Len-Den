@@ -23,7 +23,7 @@ class router {
       case "addtodo":
         return MaterialPageRoute(builder: (_) => AddTodos());
       case "addexpense":
-        return MaterialPageRoute(builder: (_) => const AddExpenses());
+        return MaterialPageRoute(builder: (_) => AddExpenses());
       case "addtodoout":
         return MaterialPageRoute(builder: (_) => AddTodosOut());
       case "editr":

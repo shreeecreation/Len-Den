@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart' as gets;
 import 'package:merokarobar/Add%20Todos/Presentation/addtodos.dart';
 import 'package:merokarobar/Add%20Todos/Presentation/addtodosoutgoing.dart';
@@ -9,6 +10,7 @@ import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
 import 'package:merokarobar/Expenses/expenses.dart';
+import 'package:merokarobar/Expenses/showexpense.dart';
 import 'package:merokarobar/Home/bloc/list_bloc.dart';
 import 'package:merokarobar/Theme/theme.dart';
 
@@ -28,6 +30,7 @@ class _HomeState extends State<Home> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<BlcProvider>().gettotalblc();
       context.read<BlcProvider>().getpaidblc();
+      context.read<ExpenseProvider>().gettotalblc();
     });
     context.read<ListBloc>().add(ListfetchingEvent());
     Future.delayed(const Duration(seconds: 1), () {
@@ -53,8 +56,7 @@ class _HomeState extends State<Home> {
                 labelBackgroundColor: const Color.fromARGB(255, 137, 238, 159),
                 backgroundColor: Colors.green,
                 onTap: () {
-                                    gets.Get.to(AddTodos(), transition: gets.Transition.fadeIn, duration: const Duration(milliseconds: 200));
-
+                  gets.Get.to(AddTodos(), transition: gets.Transition.fadeIn, duration: const Duration(milliseconds: 200));
                 }),
             SpeedDialChild(
                 child: const Icon(Icons.add),
@@ -64,7 +66,6 @@ class _HomeState extends State<Home> {
                 backgroundColor: Colors.green,
                 onTap: () {
                   gets.Get.to(AddTodosOut(), transition: gets.Transition.rightToLeft, duration: const Duration(milliseconds: 500));
-
                 }),
             SpeedDialChild(
                 child: const Icon(Icons.add),
@@ -74,7 +75,7 @@ class _HomeState extends State<Home> {
                 backgroundColor: Colors.green,
                 onTap: () {
                   // Get.toNamed("addexpenses",transition: );
-                  gets.Get.to(const AddExpenses(), transition: gets.Transition.leftToRight, duration: const Duration(milliseconds: 500));
+                  gets.Get.to(AddExpenses(), transition: gets.Transition.leftToRight, duration: const Duration(milliseconds: 500));
                 })
           ],
         ),
@@ -117,7 +118,7 @@ class _HomeState extends State<Home> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(context.watch<BlcProvider>().totalblc.toString(),
+                                          Text("Rs. ${context.watch<BlcProvider>().totalblc.toString()}",
                                               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                                           const Text("Incoming", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54)),
                                         ],
@@ -142,7 +143,7 @@ class _HomeState extends State<Home> {
                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                       Image.asset("assets/Images/outgoing.png", height: 45),
                                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                        Text(context.watch<BlcProvider>().paidblc.toString(),
+                                        Text("Rs. ${context.watch<BlcProvider>().paidblc.toString()}",
                                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                                         const Text("Outgoing", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54))
                                       ])
@@ -170,13 +171,12 @@ class _HomeState extends State<Home> {
                           a = snapshot.data ?? [];
                           foundUsers = a;
                           if (!snapshot.hasData) {
-                            return const Center(child: Text("Loading"));
+                            return const Center(child: Text("Loading..."));
                           }
                           return snapshot.data!.isEmpty
                               ? const Center(child: Text("No Parties found"))
                               : foundUsers.isNotEmpty
-                                  ? ListView.builder(
-                                      itemCount: foundUsers.length, itemBuilder: (context, index) => ListTile(title: Text(foundUsers[index].name!)))
+                                  ? ListView.builder(itemCount: foundUsers.length, itemBuilder: (context, index) => const Text(""))
                                   : const Text("No User Found");
                         },
                       ),
@@ -238,7 +238,13 @@ class _HomeState extends State<Home> {
             width: 150,
             height: 50,
             child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  gets.Get.to(
+                      () => ShowExpenses(
+                            totalblc: context.watch<ExpenseProvider>().totalblc,
+                          ),
+                      transition: gets.Transition.cupertino);
+                },
                 style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: Colors.white),
                 child: Row(children: const [
                   Text("Expenses", style: TextStyle(color: Colors.black, fontSize: 16)),
@@ -251,35 +257,47 @@ class _HomeState extends State<Home> {
     );
   }
 
-  ListView partyListView() {
-    return ListView.builder(
-        itemCount: foundUsers.length,
-        itemBuilder: (context, index) => Column(
-              children: [
-                ListTile(
-                  leading: ProfilePicture(name: foundUsers[index].name!, radius: 20, random: false, fontsize: 21),
-                  onTap: () {
-                    Navigator.pushNamed(context, "edit", arguments: {"model": foundUsers[index].toMap()});
-                  },
-                  title: Text(foundUsers[index].name!),
-                  subtitle: Text(foundUsers[index].phone!),
-                  trailing: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Rs. ${foundUsers[index].totalblc}",
-                          style: foundUsers[index].mode == 1 ? const TextStyle(color: Colors.green) : const TextStyle(color: Colors.red)),
-                      const SizedBox(height: 5),
-                      Text(foundUsers[index].mode == 1 ? "To Receive" : "To Give",
-                          style: foundUsers[index].mode == 1
-                              ? const TextStyle(color: Colors.green, fontSize: 12)
-                              : const TextStyle(color: Colors.red, fontSize: 12)),
-                    ],
+  AnimationLimiter partyListView() {
+    return AnimationLimiter(
+      child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: foundUsers.length,
+          itemBuilder: (context, index) => Column(
+                children: [
+                  AnimationConfiguration.staggeredList(
+                    position: index,
+                    child: FadeInAnimation(
+                      // verticalOffset: 50.0,
+                      duration: const Duration(seconds: 1),
+                      child: ScaleAnimation(
+                        child: ListTile(
+                          leading: ProfilePicture(name: foundUsers[index].name!, radius: 20, random: false, fontsize: 21),
+                          onTap: () {
+                            Navigator.pushNamed(context, "edit", arguments: {"model": foundUsers[index].toMap()});
+                          },
+                          title: Text(foundUsers[index].name!),
+                          subtitle: Text(foundUsers[index].phone!),
+                          trailing: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Rs. ${foundUsers[index].totalblc}",
+                                  style: foundUsers[index].mode == 1 ? const TextStyle(color: Colors.green) : const TextStyle(color: Colors.red)),
+                              const SizedBox(height: 5),
+                              Text(foundUsers[index].mode == 1 ? "To Receive" : "To Give",
+                                  style: foundUsers[index].mode == 1
+                                      ? const TextStyle(color: Colors.green, fontSize: 12)
+                                      : const TextStyle(color: Colors.red, fontSize: 12)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                const Divider(),
-              ],
-            ));
+                  const Divider(),
+                ],
+              )),
+    );
   }
 
   Row searchWidget(BuildContext context) {

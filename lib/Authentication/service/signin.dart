@@ -28,6 +28,6 @@ class SignIn {
     PhoneAuthCredential credential = PhoneAuthProvider.credential(smsCode: pin, verificationId: id);
     await auth.signInWithCredential(credential);
     // ignore: use_build_context_synchronously
-    Navigator.push(context, MaterialPageRoute(builder: ((context) => Home())));
+    Navigator.push(context, MaterialPageRoute(builder: ((context) => const Home())));
   }
 }

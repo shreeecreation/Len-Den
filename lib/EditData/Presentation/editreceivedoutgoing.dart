@@ -6,6 +6,7 @@ import 'package:merokarobar/Database/editdatabase.dart/editdatabase.dart';
 import 'package:merokarobar/Database/editdatabase.dart/model.dart';
 import 'package:merokarobar/Home/Presentation/home.dart';
 import 'package:merokarobar/Theme/theme.dart';
+import 'package:merokarobar/Utils/dialog.dart';
 
 // ignore: must_be_immutable
 class EditReceived extends StatefulWidget {
@@ -58,32 +59,36 @@ class _EditReceivedState extends State<EditReceived> {
                       onPressed: () async {
                         if (formGlobalKeyedit.currentState!.validate()) {
                           formGlobalKeyedit.currentState!.save();
-                          var price = widget.mode == 1
-                              ? widget.modeString == "Receiving"
-                                  ? widget.totalblc - int.parse(openingBlc.text)
-                                  : widget.totalblc + int.parse(openingBlc.text)
-                              : widget.modeString == "Outgoing"
-                                  ? widget.totalblc - int.parse(openingBlc.text)
-                                  : widget.totalblc + int.parse(openingBlc.text);
-                          DateTime now = DateTime.now();
-                          String formattedDate = DateFormat('MMMM d , y – kk:mm a').format(now);
-                          await EditDatabaseHelper.instance.add(
-                              EditModel(
-                                  blc: int.parse(openingBlc.text),
-                                  date: formattedDate,
-                                  mode: widget.mode == 1
-                                      ? widget.modeString == "Receiving"
-                                          ? 1
-                                          : 0
-                                      : widget.modeString == "Outgoing"
-                                          ? 0
-                                          : 1,
-                                  name: widget.model["name"],
-                                  initialblc: widget.model["blc"],
-                                  totalblc: price),
-                              widget.username);
-                          DatabaseHelper.intialBlc(widget.model["id"], price);
-                          Get.off(const Home());
+                          if (widget.model["blc"] < int.parse(openingBlc.text)) {
+                            Dialogs.showAlertDialog(context);
+                          } else {
+                            var price = widget.mode == 1
+                                ? widget.modeString == "Receiving"
+                                    ? widget.totalblc - int.parse(openingBlc.text)
+                                    : widget.totalblc + int.parse(openingBlc.text)
+                                : widget.modeString == "Outgoing"
+                                    ? widget.totalblc - int.parse(openingBlc.text)
+                                    : widget.totalblc + int.parse(openingBlc.text);
+                            DateTime now = DateTime.now();
+                            String formattedDate = DateFormat('MMMM d , y – kk:mm a').format(now);
+                            await EditDatabaseHelper.instance.add(
+                                EditModel(
+                                    blc: int.parse(openingBlc.text),
+                                    date: formattedDate,
+                                    mode: widget.mode == 1
+                                        ? widget.modeString == "Receiving"
+                                            ? 1
+                                            : 0
+                                        : widget.modeString == "Outgoing"
+                                            ? 0
+                                            : 1,
+                                    name: widget.model["name"],
+                                    initialblc: widget.model["blc"],
+                                    totalblc: price),
+                                widget.username);
+                            DatabaseHelper.intialBlc(widget.model["id"], price);
+                            Get.off(const Home());
+                          }
                         }
                       },
                       child: const Text("Save"))),
@@ -104,10 +109,7 @@ class _EditReceivedState extends State<EditReceived> {
                   data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                   child: ExpansionTile(
                       initiallyExpanded: true,
-                      title: const Text(
-                        "Add Balance",
-                        style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
-                      ),
+                      title: const Text("Add Balance", style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
                       textColor: Colors.black,
                       iconColor: Colors.black,
                       trailing: const Icon(Icons.add),
@@ -171,6 +173,17 @@ class _EditReceivedState extends State<EditReceived> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                         initialValue: widget.model["phone"],
+                        cursorColor: Colors.black,
+                        readOnly: true,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(border: InputBorder.none, filled: true, fillColor: Color.fromARGB(31, 128, 128, 128))))),
+            const Padding(padding: EdgeInsets.all(8.0), child: Text("Current Balance", style: TextStyle(fontSize: 16))),
+            SizedBox(
+                height: 80,
+                child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                        initialValue: widget.model["blc"].toString(),
                         cursorColor: Colors.black,
                         readOnly: true,
                         keyboardType: TextInputType.number,

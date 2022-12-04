@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
 import 'package:merokarobar/Home/bloc/list_bloc.dart';
@@ -9,8 +10,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
   await Firebase.initializeApp();
-  runApp(MultiProvider(providers: [ChangeNotifierProvider(create: (_) => BlcProvider())], child: const MyApp()));
+  runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => BlcProvider()), ChangeNotifierProvider(create: (_) => ExpenseProvider())],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
       },
       child: MultiBlocProvider(
         providers: [

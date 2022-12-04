@@ -6,6 +6,7 @@ import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/Login/Presentation/home.dart';
 import 'package:merokarobar/Theme/theme.dart';
+import 'package:merokarobar/Utils/dialog.dart';
 
 // ignore: must_be_immutable
 class AddTodosOut extends StatelessWidget {
@@ -52,6 +53,8 @@ class AddTodosOut extends StatelessWidget {
         style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
         onPressed: () async {
           if (formGlobalKey.currentState!.validate() && formGlobalKey2.currentState!.validate()) {
+            Dialogs.showAlertDialog(context);
+
             formGlobalKey.currentState!.save();
             formGlobalKey2.currentState!.save();
             DateTime now = DateTime.now();

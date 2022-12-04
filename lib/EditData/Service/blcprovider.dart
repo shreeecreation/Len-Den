@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:merokarobar/Database/database.dart';
+import 'package:merokarobar/Expenses/services/database.dart';
 
 class BlcProvider extends ChangeNotifier {
   int _totalblc = 0;
@@ -33,6 +34,25 @@ class BlcProvider extends ChangeNotifier {
       }
       for (var element in paidamount) {
         _paidblc += int.parse(element);
+        notifyListeners();
+      }
+    });
+  }
+}
+
+class ExpenseProvider extends ChangeNotifier {
+  int _totalblc = 0;
+  int get totalblc => _totalblc;
+  void gettotalblc() {
+    var totalamount = [];
+    _totalblc = 0;
+    var totalblcchecker = ExpenseDatabaseHelper.totalblc();
+    totalblcchecker.then((value) {
+      for (var element in value) {
+        totalamount.add(element.values.join());
+      }
+      for (var element in totalamount) {
+        _totalblc += int.parse(element);
         notifyListeners();
       }
     });

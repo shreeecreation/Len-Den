@@ -198,6 +198,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.0"
+  flutter_staggered_animations:
+    dependency: "direct main"
+    description:
+      name: flutter_staggered_animations
+      sha256: "81d3c816c9bb0dca9e8a5d5454610e21ffb068aedb2bde49d2f8d04f75538351"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -216,6 +224,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.6.5"
+  group_button:
+    dependency: "direct main"
+    description:
+      name: group_button
+      sha256: b78805a776e5a0cbda4d6a872ab49a671926814b2b3529983e4469259feea82b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
   http_parser:
     dependency: transitive
     description:
@@ -280,14 +296,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  page_transition:
-    dependency: "direct main"
-    description:
-      name: page_transition
-      sha256: a7694bc120b7064a7f57c336914bb8885acf4f70bb3772c30c2fcfe6a85e43ff
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.9"
   path:
     dependency: "direct main"
     description:
