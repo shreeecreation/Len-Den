@@ -57,37 +57,60 @@ class _EditReceivedState extends State<EditReceived> {
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
                       onPressed: () async {
+                        print(widget.totalblc);
+                        void mainfunction() async {
+                          var price = widget.mode == 1
+                              ? widget.modeString == "Receiving"
+                                  ? widget.totalblc - int.parse(openingBlc.text)
+                                  : widget.totalblc + int.parse(openingBlc.text)
+                              : widget.modeString == "Outgoing"
+                                  ? widget.totalblc - int.parse(openingBlc.text)
+                                  : widget.totalblc + int.parse(openingBlc.text);
+                          DateTime now = DateTime.now();
+                          String formattedDate = DateFormat('MMMM d , y – kk:mm a').format(now);
+                          await EditDatabaseHelper.instance.add(
+                              EditModel(
+                                  blc: int.parse(openingBlc.text),
+                                  date: formattedDate,
+                                  mode: widget.mode == 1
+                                      ? widget.modeString == "Receiving"
+                                          ? 1
+                                          : 0
+                                      : widget.modeString == "Outgoing"
+                                          ? 0
+                                          : 1,
+                                  name: widget.model["name"],
+                                  initialblc: widget.model["blc"],
+                                  totalblc: price),
+                              widget.username);
+                          DatabaseHelper.intialBlc(widget.model["id"], price);
+                          Get.off(const Home());
+                        }
+
                         if (formGlobalKeyedit.currentState!.validate()) {
                           formGlobalKeyedit.currentState!.save();
-                          if (widget.model["blc"] < int.parse(openingBlc.text)) {
-                            Dialogs.showAlertDialog(context);
-                          } else {
-                            var price = widget.mode == 1
-                                ? widget.modeString == "Receiving"
-                                    ? widget.totalblc - int.parse(openingBlc.text)
-                                    : widget.totalblc + int.parse(openingBlc.text)
-                                : widget.modeString == "Outgoing"
-                                    ? widget.totalblc - int.parse(openingBlc.text)
-                                    : widget.totalblc + int.parse(openingBlc.text);
-                            DateTime now = DateTime.now();
-                            String formattedDate = DateFormat('MMMM d , y – kk:mm a').format(now);
-                            await EditDatabaseHelper.instance.add(
-                                EditModel(
-                                    blc: int.parse(openingBlc.text),
-                                    date: formattedDate,
-                                    mode: widget.mode == 1
-                                        ? widget.modeString == "Receiving"
-                                            ? 1
-                                            : 0
-                                        : widget.modeString == "Outgoing"
-                                            ? 0
-                                            : 1,
-                                    name: widget.model["name"],
-                                    initialblc: widget.model["blc"],
-                                    totalblc: price),
-                                widget.username);
-                            DatabaseHelper.intialBlc(widget.model["id"], price);
-                            Get.off(const Home());
+                          if (widget.totalblc < int.parse(openingBlc.text)) {
+                            Dialogs.showMoreamount(context);
+                          }
+                          if (widget.totalblc == int.parse(openingBlc.text)) {
+                            if (widget.mode == 1) {
+                              if (widget.modeString == "Receiving") {
+                                Dialogs.showsetteld(context, widget.model);
+                              } else {
+                                mainfunction();
+                              }
+                            }
+                            if (widget.mode == 0) {
+                              if (widget.modeString == "Outgoing") {
+                                Dialogs.showsetteld(context, widget.model);
+                              } else {
+                                mainfunction();
+                              }
+                            }
+                          }
+
+                          if (widget.totalblc > int.parse(openingBlc.text)) {
+                            mainfunction();
                           }
                         }
                       },
@@ -183,7 +206,7 @@ class _EditReceivedState extends State<EditReceived> {
                 child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                        initialValue: widget.model["blc"].toString(),
+                        initialValue: widget.model["totalblc"].toString(),
                         cursorColor: Colors.black,
                         readOnly: true,
                         keyboardType: TextInputType.number,

@@ -47,6 +47,22 @@ class DatabaseHelper {
     return await db.rawQuery('SELECT totalblc FROM groceriess WHERE mode = 0');
   }
 
+  static Future<List<PartyModel>> getIncome() async {
+    Database db = await instance.database;
+    var groceries = await db.rawQuery('SELECT * FROM groceriess WHERE mode = 1');
+
+    List<PartyModel> groceryList = groceries.isNotEmpty ? groceries.map((c) => PartyModel.fromMap(c)).toList() : [];
+    return groceryList;
+  }
+
+  static Future<List<PartyModel>> getOutgoing() async {
+    Database db = await instance.database;
+    var groceries = await db.rawQuery('SELECT * FROM groceriess WHERE mode = 0');
+
+    List<PartyModel> groceryList = groceries.isNotEmpty ? groceries.map((c) => PartyModel.fromMap(c)).toList() : [];
+    return groceryList;
+  }
+
   Future<List<PartyModel>> getPartyName() async {
     Database db = await instance.database;
     var groceries = await db.query('groceriess', orderBy: 'name');
@@ -59,7 +75,7 @@ class DatabaseHelper {
     return await db.insert('groceriess', grocery.toMap());
   }
 
-  Future<int> deleteparty(int id) async {
+  static Future<int> deleteparty(int id) async {
     Database db = await instance.database;
     return await db.rawDelete('DELETE FROM groceriess WHERE id = $id');
   }

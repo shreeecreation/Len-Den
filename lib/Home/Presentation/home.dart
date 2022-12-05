@@ -4,6 +4,7 @@ import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart' as gets;
+import 'package:get/get.dart';
 import 'package:merokarobar/Add%20Todos/Presentation/addtodos.dart';
 import 'package:merokarobar/Add%20Todos/Presentation/addtodosoutgoing.dart';
 import 'package:merokarobar/Database/database.dart';
@@ -43,6 +44,9 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: SpeedDial(
+          onOpen: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           animatedIcon: AnimatedIcons.add_event,
           backgroundColor: Colors.green[400],
           overlayOpacity: 0.3,
@@ -102,55 +106,70 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         /////// Incoming Amount Container///////
-                        Container(
-                            decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(5))),
-                            height: 75,
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Image.asset("assets/Images/incoming.png", height: 45),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Rs. ${context.watch<BlcProvider>().totalblc.toString()}",
-                                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                          const Text("Incoming", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54)),
-                                        ],
-                                      ),
-                                    ],
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              "showincome",
+                            );
+                          },
+                          child: Container(
+                              decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(5))),
+                              height: 75,
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset("assets/Images/incoming.png", height: 45),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("Rs. ${context.watch<BlcProvider>().totalblc.toString()}",
+                                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                                            const Text("Incoming",
+                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 5),
-                              ],
-                            )),
+                                  const SizedBox(height: 5),
+                                ],
+                              )),
+                        ),
 
                         ///Outgoing Amount Container /////////
-                        Container(
-                            decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(5))),
-                            height: 75,
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                      Image.asset("assets/Images/outgoing.png", height: 45),
-                                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                        Text("Rs. ${context.watch<BlcProvider>().paidblc.toString()}",
-                                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                                        const Text("Outgoing", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54))
-                                      ])
-                                    ])),
-                                const SizedBox(height: 5),
-                              ],
-                            )),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              "showexpenses",
+                            );
+                          },
+                          child: Container(
+                              decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(5))),
+                              height: 75,
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                        Image.asset("assets/Images/outgoing.png", height: 45),
+                                        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                          Text("Rs. ${context.watch<BlcProvider>().paidblc.toString()}",
+                                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                                          const Text("Outgoing", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54))
+                                        ])
+                                      ])),
+                                  const SizedBox(height: 5),
+                                ],
+                              )),
+                        ),
                       ],
                     ),
                     Container(color: CTheme.kPrimaryColor, height: 30, width: 100, child: const Text("")),
@@ -243,7 +262,8 @@ class _HomeState extends State<Home> {
                       () => ShowExpenses(
                             totalblc: context.watch<ExpenseProvider>().totalblc,
                           ),
-                      transition: gets.Transition.cupertino);
+                      transition: gets.Transition.rightToLeftWithFade,
+                      duration: const Duration(milliseconds: 500));
                 },
                 style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: Colors.white),
                 child: Row(children: const [

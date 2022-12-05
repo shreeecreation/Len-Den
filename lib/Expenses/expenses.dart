@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:group_button/group_button.dart';
 import 'package:intl/intl.dart';
 import 'package:merokarobar/Expenses/services/database.dart';
-import 'package:merokarobar/Login/Presentation/home.dart';
 import 'package:merokarobar/Theme/theme.dart';
 import 'package:merokarobar/Utils/dialog.dart';
 
@@ -27,6 +25,7 @@ class AddExpenses extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CTheme.kPrimaryColor,
+        title: const Text("Add Expense"),
       ),
       body: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -122,13 +121,20 @@ class AddExpenses extends StatelessWidget {
         height: 80,
         child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextFormField(controller: notescontroller, maxLength: 100, maxLines: 5, cursorColor: Colors.black, decoration: inputDecoration)));
+            child: TextFormField(
+                textCapitalization: TextCapitalization.words,
+                controller: notescontroller,
+                maxLength: 100,
+                maxLines: 5,
+                cursorColor: Colors.black,
+                decoration: inputDecoration)));
   }
 
   ElevatedButton savebutton(BuildContext context) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
         onPressed: () async {
+          FocusManager.instance.primaryFocus?.unfocus();
           if (formGlobalKey.currentState!.validate()) {
             Dialogs.showAlertDialog(context);
             formGlobalKey.currentState!.save();
@@ -140,16 +146,6 @@ class AddExpenses extends StatelessWidget {
                 category: CategoryState.dropdownvalue,
                 notes: notescontroller.text,
                 date: formattedDate));
-            await Future.delayed(const Duration(seconds: 1), () {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushAndRemoveUntil<dynamic>(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (BuildContext context) => const HomePage(),
-                    ),
-                    (route) => false);
-              });
-            });
           }
         },
         child: const Text("Save", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)));

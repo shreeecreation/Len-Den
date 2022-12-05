@@ -7,6 +7,8 @@ import 'package:merokarobar/EditData/Presentation/editdata.dart';
 import 'package:merokarobar/EditData/Presentation/editreceivedoutgoing.dart';
 import 'package:merokarobar/Expenses/expenses.dart';
 import 'package:merokarobar/Home/Presentation/home.dart';
+import 'package:merokarobar/Home/Presentation/showexpense.dart';
+import 'package:merokarobar/Home/Presentation/showincome.dart';
 import 'package:merokarobar/Login/Presentation/home.dart';
 import 'package:merokarobar/Login/Presentation/otp.dart';
 
@@ -26,6 +28,10 @@ class router {
         return MaterialPageRoute(builder: (_) => AddExpenses());
       case "addtodoout":
         return MaterialPageRoute(builder: (_) => AddTodosOut());
+      case "showincome":
+        return MaterialPageRoute(builder: (_) => const ShowIncome());
+      case "showexpenses":
+        return MaterialPageRoute(builder: (_) => const ShowExpense());
       case "editr":
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(

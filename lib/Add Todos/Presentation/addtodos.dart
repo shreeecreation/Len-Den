@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:merokarobar/Database/database.dart';
 
 import 'package:merokarobar/Database/model.dart';
-import 'package:merokarobar/Login/Presentation/home.dart';
 import 'package:merokarobar/Theme/theme.dart';
 import 'package:merokarobar/Utils/dialog.dart';
 
@@ -67,16 +65,6 @@ class AddTodos extends StatelessWidget {
                 date: formattedDate,
                 mode: 1,
                 totalblc: int.parse(openingBlc.text)));
-            await Future.delayed(const Duration(seconds: 1), () {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushAndRemoveUntil<dynamic>(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (BuildContext context) => const HomePage(),
-                    ),
-                    (route) => false);
-              });
-            });
           }
         },
         child: const Text("Save"));
