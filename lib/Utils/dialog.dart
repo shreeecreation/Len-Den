@@ -74,7 +74,7 @@ class Dialogs {
     );
   }
 
-  static void showsetteld(BuildContext context, Map<String, dynamic> model) {
+  static void showsetteld(BuildContext context, Map<String, dynamic> model, void Function() a) {
     showGeneralDialog(
       context: context,
       pageBuilder: (ctx, a1, a2) {
@@ -102,7 +102,7 @@ class Dialogs {
                   onPressed: () async {
                     Navigator.of(context).pop();
                     await Future.delayed(const Duration(milliseconds: 500));
-                    Get.offAll(() => const HomePage());
+                    a();
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: CTheme.kPrimaryColor, // Text Color

@@ -55,8 +55,8 @@ class ShowIncome extends StatelessWidget {
                                               verticalOffset: 50.0,
                                               duration: const Duration(seconds: 1),
                                               child: FadeInAnimation(
-                                                  child: cardView0(snapshot.data![index].date, snapshot.data![index].blc, snapshot.data![index].name,
-                                                      snapshot.data![index].phone)),
+                                                  child: cardView0(snapshot.data![index].date, snapshot.data![index].totalblc,
+                                                      snapshot.data![index].blc, snapshot.data![index].name, snapshot.data![index].phone)),
                                             )),
                                         const Divider(),
                                       ],
@@ -99,10 +99,10 @@ class ShowIncome extends StatelessWidget {
     ]);
   }
 
-  Card cardView0(date, blc, name, number) {
+  Card cardView0(date, totalblc, currentblc, name, number) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(5.0),
         child: ListTile(
             title: Text("Incoming from $name ", style: const TextStyle(fontSize: 18)),
             subtitle: Column(
@@ -117,7 +117,13 @@ class ShowIncome extends StatelessWidget {
                     child: Text("Phone No. $number", style: TextStyle(color: CTheme.kPrimaryColor)))
               ],
             ),
-            trailing: Text("Rs. $blc", style: TextStyle(color: CTheme.kPrimaryColor))),
+            trailing: Column(
+              children: [
+                Text(" Total Rs. $currentblc", style: TextStyle(color: CTheme.kPrimaryColor, fontSize: 16)),
+                const SizedBox(height: 15),
+                Text(" Received Rs. ${currentblc - totalblc}", style: TextStyle(color: CTheme.kPrimaryColor, fontSize: 15)),
+              ],
+            )),
       ),
     );
   }

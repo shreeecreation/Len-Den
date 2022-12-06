@@ -202,27 +202,25 @@ class _HomeState extends State<Home> {
                     );
                   }
                   if (state is ListFetchedState) {
-                    return SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        child: FutureBuilder<List<PartyModel>>(
-                            future: DatabaseHelper.instance.getPartyName(),
-                            builder: (BuildContext context, AsyncSnapshot<List<PartyModel>> snapshot) {
-                              a = snapshot.data ?? [];
-                              if (!snapshot.hasData) {
-                                return const Center(child: Text("Loading"));
-                              }
-                              return snapshot.data!.isEmpty
-                                  ? Center(
-                                      child: Column(children: const [
-                                      Icon(Icons.person, size: 150, color: Colors.black54),
-                                      Text("No Parties found !", style: TextStyle(fontSize: 18, color: Colors.black54)),
-                                      SizedBox(height: 10),
-                                      Text("Start by Adding Parties", style: TextStyle(fontSize: 18, color: Colors.black54))
-                                    ]))
-                                  : foundUsers.isNotEmpty
-                                      ? partyListView()
-                                      : const Text("No User Found");
-                            }));
+                    return FutureBuilder<List<PartyModel>>(
+                        future: DatabaseHelper.instance.getPartyName(),
+                        builder: (BuildContext context, AsyncSnapshot<List<PartyModel>> snapshot) {
+                          a = snapshot.data ?? [];
+                          if (!snapshot.hasData) {
+                            return const Center(child: Text("Loading"));
+                          }
+                          return snapshot.data!.isEmpty
+                              ? Center(
+                                  child: Column(children: const [
+                                  Icon(Icons.person, size: 150, color: Colors.black54),
+                                  Text("No Parties found !", style: TextStyle(fontSize: 18, color: Colors.black54)),
+                                  SizedBox(height: 10),
+                                  Text("Start by Adding Parties", style: TextStyle(fontSize: 18, color: Colors.black54))
+                                ]))
+                              : foundUsers.isNotEmpty
+                                  ? partyListView()
+                                  : const Text("No User Found");
+                        });
                   }
                   return Container();
                 },
@@ -281,6 +279,7 @@ class _HomeState extends State<Home> {
     return AnimationLimiter(
       child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
           itemCount: foundUsers.length,
           itemBuilder: (context, index) => Column(
                 children: [

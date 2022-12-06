@@ -57,7 +57,6 @@ class _EditReceivedState extends State<EditReceived> {
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
                       onPressed: () async {
-                        print(widget.totalblc);
                         void mainfunction() async {
                           var price = widget.mode == 1
                               ? widget.modeString == "Receiving"
@@ -84,25 +83,40 @@ class _EditReceivedState extends State<EditReceived> {
                                   totalblc: price),
                               widget.username);
                           DatabaseHelper.intialBlc(widget.model["id"], price);
-                          Get.off(const Home());
+                          Get.offAll(const Home());
                         }
 
                         if (formGlobalKeyedit.currentState!.validate()) {
                           formGlobalKeyedit.currentState!.save();
                           if (widget.totalblc < int.parse(openingBlc.text)) {
-                            Dialogs.showMoreamount(context);
+                            if (widget.mode == 1) {
+                              if (widget.modeString == "Receiving") {
+                                Dialogs.showMoreamount(context);
+                              } else {
+                                mainfunction();
+                              }
+                            }
+                          }
+                          if (widget.totalblc < int.parse(openingBlc.text)) {
+                            if (widget.mode == 0) {
+                              if (widget.modeString == "Outgoing") {
+                                Dialogs.showMoreamount(context);
+                              } else {
+                                mainfunction();
+                              }
+                            }
                           }
                           if (widget.totalblc == int.parse(openingBlc.text)) {
                             if (widget.mode == 1) {
                               if (widget.modeString == "Receiving") {
-                                Dialogs.showsetteld(context, widget.model);
+                                Dialogs.showsetteld(context, widget.model, mainfunction);
                               } else {
                                 mainfunction();
                               }
                             }
                             if (widget.mode == 0) {
                               if (widget.modeString == "Outgoing") {
-                                Dialogs.showsetteld(context, widget.model);
+                                Dialogs.showsetteld(context, widget.model, mainfunction);
                               } else {
                                 mainfunction();
                               }
