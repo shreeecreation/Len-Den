@@ -7,6 +7,7 @@ import 'package:get/get.dart' as gets;
 import 'package:get/get.dart';
 import 'package:merokarobar/Add%20Todos/Presentation/addtodos.dart';
 import 'package:merokarobar/Add%20Todos/Presentation/addtodosoutgoing.dart';
+import 'package:merokarobar/Alarm/app/modules/views/homepage.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
@@ -240,7 +241,9 @@ class _HomeState extends State<Home> {
             width: 150,
             height: 50,
             child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  gets.Get.to(() => const AlarmMain(), transition: gets.Transition.downToUp);
+                },
                 style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: Colors.white),
                 child: Row(children: const [
                   Text("Reminders", style: TextStyle(color: Colors.black, fontSize: 16)),
@@ -351,24 +354,3 @@ class _HomeState extends State<Home> {
     });
   }
 }
-      //  ElevatedButton(
-      //         style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-      //         onPressed: () {
-      //           Navigator.pushNamed(context, "addtodo");
-      //         },
-      //         child: const Text("Add Receiving")),
-      //     Padding(
-      //       padding: const EdgeInsets.only(top: 18),
-      //       child: ElevatedButton(
-      //           style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-      //           onPressed: () {
-      //             Navigator.pushNamed(context, "addtodoout");
-      //           },
-      //           child: const Text("Add Outgoing")),
-      //     ),
-      //     ElevatedButton(
-      //         style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-      //         onPressed: () {
-      //           Navigator.pushNamed(context, "addtodo");
-      //         },
-      //         child: const Text("Add Expenses")),
