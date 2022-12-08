@@ -49,7 +49,7 @@ class AlarmPageState extends State<AlarmPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Alarm',
+            'Reminder',
             style: TextStyle(fontFamily: 'avenir', fontWeight: FontWeight.w700, color: CustomColors.primaryTextColor, fontSize: 24),
           ),
           Expanded(
@@ -253,7 +253,7 @@ class AlarmPageState extends State<AlarmPage> {
                                   ),
                                   const SizedBox(height: 8),
                                   const Text(
-                                    'Add Alarm',
+                                    'Add Reminder',
                                     style: TextStyle(color: Colors.white, fontFamily: 'avenir'),
                                   ),
                                 ],

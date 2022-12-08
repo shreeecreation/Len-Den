@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:merokarobar/Database/editdatabase.dart/editdatabase.dart';
 import 'package:merokarobar/Database/editdatabase.dart/model.dart';
 import 'package:merokarobar/Theme/theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EditParty extends StatelessWidget {
   final Map<String, dynamic> model;
@@ -141,14 +143,30 @@ class EditParty extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text("Rs. $blc", style: TextStyle(fontSize: 15, color: mode == 1 ? CTheme.kPrimaryColor : Colors.red))
                     ])),
-                Row(children: [rowButtons(Icons.phone), rowButtons(Icons.message)])
+                Row(children: [rowButtons(Icons.phone, 0, phone), rowButtons(Icons.message, 1, phone)])
               ]))))
     ]);
   }
 
-  ElevatedButton rowButtons(IconData icon) {
+  ElevatedButton rowButtons(IconData icon, var id, number) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () async {
+        Uri phoneno = Uri.parse('tel:+977$number');
+        if (id == 0) {
+          if (await launchUrl(phoneno)) {
+            //dialer opened
+          } else {
+            //dailer is not opened
+          }
+        } else {
+          Uri sms = Uri.parse('sms:101022?body=your+text+here');
+          if (await launchUrl(sms)) {
+            //app opened
+          } else {
+            //app is not opened
+          }
+        }
+      },
       style: ElevatedButton.styleFrom(
           shape: const CircleBorder(), padding: const EdgeInsets.all(8), backgroundColor: CTheme.kPrimaryColor // <-- Button color
           ),

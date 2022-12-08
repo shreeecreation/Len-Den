@@ -9,10 +9,10 @@ class ClockPage extends StatefulWidget {
   const ClockPage({super.key});
 
   @override
-  _ClockPageState createState() => _ClockPageState();
+  ClockPageState createState() => ClockPageState();
 }
 
-class _ClockPageState extends State<ClockPage> {
+class ClockPageState extends State<ClockPage> {
   @override
   Widget build(BuildContext context) {
     var now = DateTime.now();

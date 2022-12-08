@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:intl/intl.dart';
 import 'package:merokarobar/Expenses/services/database.dart';
-import 'package:merokarobar/Theme/theme.dart';
+import 'package:merokarobar/ThemeManager/themeprovider.dart';
 import 'package:merokarobar/Utils/dialog.dart';
 
 import 'services/model.dart';
@@ -22,24 +23,26 @@ class AddExpenses extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color? primaryColor = context.watch<ThemeProvider>().themecolor;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: CTheme.kPrimaryColor,
+        backgroundColor: primaryColor,
         title: const Text("Add Expense"),
       ),
       body: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Padding(padding: EdgeInsets.all(8.0), child: Text("Expenses Details", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600))),
-          widthLongTextField(context),
+          widthLongTextField(context, primaryColor),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [SizedBox(width: MediaQuery.of(context).size.width / 2, child: savebutton(context))]),
+              children: [SizedBox(width: MediaQuery.of(context).size.width / 2, child: savebutton(context, primaryColor))]),
         ]),
       ),
     );
   }
 
-  Container widthLongTextField(BuildContext context) {
+  Container widthLongTextField(BuildContext context, var primaryColor) {
     return Container(
         color: const Color.fromARGB(31, 199, 199, 199),
         width: MediaQuery.of(context).size.width,
@@ -53,7 +56,7 @@ class AddExpenses extends StatelessWidget {
               const Padding(padding: EdgeInsets.all(8.0), child: Text("Amount", style: TextStyle(fontSize: 16))),
               amount(),
               const Padding(padding: EdgeInsets.all(8.0), child: Text("Payment Method", style: TextStyle(fontSize: 16))),
-              paymethod(),
+              paymethod(primaryColor),
               const Padding(padding: EdgeInsets.all(8.0), child: Text("Add Notes", style: TextStyle(fontSize: 16))),
               notes(),
             ],
@@ -89,13 +92,13 @@ class AddExpenses extends StatelessWidget {
                 decoration: inputDecoration)));
   }
 
-  Padding paymethod() {
+  Padding paymethod(var primaryColor) {
     return Padding(
       padding: const EdgeInsets.only(left: 10),
       child: GroupButton(
         borderRadius: BorderRadius.circular(25),
         spacing: 5,
-        selectedColor: CTheme.kPrimaryColor!,
+        selectedColor: primaryColor,
         buttons: const ['Cash', 'Cheque', 'Others'],
         onSelected: (index, isSelected) {
           switch (index) {
@@ -130,9 +133,9 @@ class AddExpenses extends StatelessWidget {
                 decoration: inputDecoration)));
   }
 
-  ElevatedButton savebutton(BuildContext context) {
+  ElevatedButton savebutton(BuildContext context, var primaryColor) {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
+        style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
         onPressed: () async {
           FocusManager.instance.primaryFocus?.unfocus();
           if (formGlobalKey.currentState!.validate()) {

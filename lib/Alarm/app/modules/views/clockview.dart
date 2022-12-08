@@ -9,10 +9,10 @@ class ClockView extends StatefulWidget {
   const ClockView({Key? key, this.size}) : super(key: key);
 
   @override
-  _ClockViewState createState() => _ClockViewState();
+  ClockViewState createState() => ClockViewState();
 }
 
-class _ClockViewState extends State<ClockView> {
+class ClockViewState extends State<ClockView> {
   late Timer timer;
 
   @override

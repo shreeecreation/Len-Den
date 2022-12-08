@@ -5,6 +5,7 @@ import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
 import 'package:merokarobar/Theme/theme.dart';
+import 'package:merokarobar/ThemeManager/themeprovider.dart';
 
 class ShowIncome extends StatelessWidget {
   const ShowIncome({
@@ -12,9 +13,11 @@ class ShowIncome extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    Color? primaryColor = context.watch<ThemeProvider>().themecolor;
+
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: CTheme.kPrimaryColor,
+          backgroundColor: primaryColor,
           title: const Text("Income "),
           elevation: 0,
         ),
@@ -22,7 +25,7 @@ class ShowIncome extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              header(context, context.watch<BlcProvider>().totalblc.toString()),
+              header(context, context.watch<BlcProvider>().totalblc.toString(), primaryColor),
               const SizedBox(height: 10),
               const Text("  All Incomes", style: TextStyle(fontSize: 19)),
               SizedBox(
@@ -38,7 +41,7 @@ class ShowIncome extends StatelessWidget {
                         ? Center(
                             child: Column(children: const [
                             Icon(Icons.person, size: 150, color: Colors.black54),
-                            Text("No Expenses found !", style: TextStyle(fontSize: 18, color: Colors.black54)),
+                            Text("No Income found !", style: TextStyle(fontSize: 18, color: Colors.black54)),
                             SizedBox(height: 10),
                           ]))
                         : AnimationLimiter(
@@ -70,9 +73,9 @@ class ShowIncome extends StatelessWidget {
         ));
   }
 
-  Stack header(BuildContext context, blc) {
+  Stack header(BuildContext context, blc, var primaryColor) {
     return Stack(children: [
-      Container(color: CTheme.kPrimaryColor, height: MediaQuery.of(context).size.height / 5),
+      Container(color: primaryColor, height: MediaQuery.of(context).size.height / 5),
       Positioned(
           left: 10,
           child: SizedBox(
@@ -91,7 +94,7 @@ class ShowIncome extends StatelessWidget {
                           height: 35,
                           width: 160,
                           child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
+                              style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
                               onPressed: () {},
                               child: const Text("Increase Incomes"))),
                     ])),

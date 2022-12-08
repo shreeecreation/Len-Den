@@ -1,20 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
+// import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart' as gets;
 import 'package:get/get.dart';
-import 'package:merokarobar/Add%20Todos/Presentation/addtodos.dart';
-import 'package:merokarobar/Add%20Todos/Presentation/addtodosoutgoing.dart';
-import 'package:merokarobar/Alarm/app/modules/views/homepage.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
-import 'package:merokarobar/Expenses/expenses.dart';
-import 'package:merokarobar/Expenses/showexpense.dart';
 import 'package:merokarobar/Home/bloc/list_bloc.dart';
+import 'package:merokarobar/Routes/route.dart';
+import 'package:merokarobar/Settings/settings.dart';
 import 'package:merokarobar/Theme/theme.dart';
+import 'package:merokarobar/ThemeManager/themeprovider.dart';
+import 'package:merokarobar/Utils/dialog.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -30,6 +31,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ThemeProvider>().getTheme();
       context.read<BlcProvider>().gettotalblc();
       context.read<BlcProvider>().getpaidblc();
       context.read<ExpenseProvider>().gettotalblc();
@@ -43,48 +45,11 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    User? auth = FirebaseAuth.instance.currentUser;
+    Color? primaryColor = context.watch<ThemeProvider>().themecolor;
     return Scaffold(
-        floatingActionButton: SpeedDial(
-          onOpen: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          animatedIcon: AnimatedIcons.add_event,
-          backgroundColor: Colors.green[400],
-          overlayOpacity: 0.3,
-          overlayColor: Colors.green[400],
-          activeIcon: Icons.add,
-          children: [
-            SpeedDialChild(
-                child: const Icon(Icons.add),
-                label: "Add Incoming",
-                labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                labelBackgroundColor: const Color.fromARGB(255, 137, 238, 159),
-                backgroundColor: Colors.green,
-                onTap: () {
-                  gets.Get.to(AddTodos(), transition: gets.Transition.fadeIn, duration: const Duration(milliseconds: 200));
-                }),
-            SpeedDialChild(
-                child: const Icon(Icons.add),
-                label: "Add Outgoing",
-                labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                labelBackgroundColor: const Color.fromARGB(255, 255, 161, 160),
-                backgroundColor: Colors.green,
-                onTap: () {
-                  gets.Get.to(AddTodosOut(), transition: gets.Transition.rightToLeft, duration: const Duration(milliseconds: 500));
-                }),
-            SpeedDialChild(
-                child: const Icon(Icons.add),
-                label: "Add Expenses",
-                labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                labelBackgroundColor: const Color.fromARGB(255, 255, 161, 160),
-                backgroundColor: Colors.green,
-                onTap: () {
-                  // Get.toNamed("addexpenses",transition: );
-                  gets.Get.to(AddExpenses(), transition: gets.Transition.leftToRight, duration: const Duration(milliseconds: 500));
-                })
-          ],
-        ),
-        appBar: AppBar(backgroundColor: CTheme.kPrimaryColor, elevation: 0, title: const Text("Shree Krishna Shrestha"), actions: [
+        floatingActionButton: floatingButtons(primaryColor),
+        appBar: AppBar(backgroundColor: primaryColor, elevation: 0, title: const Text("Shree Krishna Shrestha"), actions: [
           GestureDetector(
               onTap: () {
                 DatabaseHelper.deleteDatabase();
@@ -92,13 +57,13 @@ class _HomeState extends State<Home> {
               child: const Icon(Icons.sync)),
           const SizedBox(width: 20)
         ]),
-        drawer: const Drawer(),
+        drawer: homeDrawer(context, auth),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Container(color: CTheme.kPrimaryColor, height: 15, width: MediaQuery.of(context).size.width, child: const Text("")),
+              Container(color: primaryColor, height: 15, width: MediaQuery.of(context).size.width, child: const Text("")),
               Container(
-                color: CTheme.kPrimaryColor,
+                color: primaryColor,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,9 +74,7 @@ class _HomeState extends State<Home> {
                         /////// Incoming Amount Container///////
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(
-                              "showincome",
-                            );
+                            AllRoutes.routeToShowIncome();
                           },
                           child: Container(
                               decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -146,9 +109,7 @@ class _HomeState extends State<Home> {
                         ///Outgoing Amount Container /////////
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(
-                              "showexpenses",
-                            );
+                            AllRoutes.routeToshowOutgoings();
                           },
                           child: Container(
                               decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -173,9 +134,9 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                     ),
-                    Container(color: CTheme.kPrimaryColor, height: 30, width: 100, child: const Text("")),
+                    Container(color: primaryColor, height: 30, width: 100, child: const Text("")),
                     reminderrow(),
-                    Container(color: CTheme.kPrimaryColor, height: 20, width: 100, child: const Text("")),
+                    Container(color: primaryColor, height: 20, width: 100, child: const Text("")),
                   ],
                 ),
               ),
@@ -231,7 +192,123 @@ class _HomeState extends State<Home> {
         ));
   }
 
+  SpeedDial floatingButtons(Color? primaryColor) {
+    return SpeedDial(
+      onOpen: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      animatedIcon: AnimatedIcons.add_event,
+      backgroundColor: primaryColor,
+      overlayOpacity: 0.3,
+      overlayColor: primaryColor,
+      activeIcon: Icons.add,
+      children: [
+        SpeedDialChild(
+            child: const Icon(Icons.add),
+            label: "Add Incoming",
+            labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            labelBackgroundColor: const Color.fromARGB(255, 137, 238, 159),
+            backgroundColor: primaryColor,
+            onTap: () {
+              AllRoutes.routeToAddIncome();
+            }),
+        SpeedDialChild(
+            child: const Icon(Icons.add),
+            label: "Add Outgoing",
+            labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            labelBackgroundColor: const Color.fromARGB(255, 255, 161, 160),
+            backgroundColor: primaryColor,
+            onTap: () {
+              AllRoutes.routeToAddOutgoings();
+            }),
+        SpeedDialChild(
+            child: const Icon(Icons.add),
+            label: "Add Expenses",
+            labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            labelBackgroundColor: const Color.fromARGB(255, 255, 161, 160),
+            backgroundColor: primaryColor,
+            onTap: () {
+              AllRoutes.routeToAddExpenses();
+            })
+      ],
+    );
+  }
+
+  Drawer homeDrawer(BuildContext context, User? auth) {
+    var totalblc = context.watch<ExpenseProvider>().totalblc;
+
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          UserAccountsDrawerHeader(
+              decoration: BoxDecoration(color: context.watch<ThemeProvider>().themecolor),
+              currentAccountPicture: const Icon(Icons.face, size: 48.0, color: Colors.white),
+              accountName: const Text("H. A. Smrity"),
+              accountEmail: Text(auth!.phoneNumber ?? "dasd")),
+          ListTile(title: const Text("App Features"), onTap: () => {}),
+          ListTile(
+              leading: const Icon(Icons.arrow_forward, color: Colors.green),
+              title: const Text("Show Incoming"),
+              onTap: () {
+                Navigator.pop(context);
+
+                AllRoutes.routeToShowIncome();
+              }),
+          ListTile(
+              leading: const Icon(Icons.arrow_back, color: Colors.red),
+              title: const Text("Show Outgoing"),
+              onTap: () {
+                Navigator.pop(context);
+
+                AllRoutes.routeToshowOutgoings();
+              }),
+          ListTile(
+              leading: const Icon(Icons.shopping_cart, color: Colors.red),
+              title: const Text("Show Expenses"),
+              onTap: () {
+                Navigator.pop(context);
+
+                AllRoutes.routeToshowExpenses(totalblc);
+              }),
+          ListTile(
+              leading: const Icon(Icons.calendar_month_outlined, color: Colors.green),
+              title: const Text("Show Reminder"),
+              onTap: () {
+                Navigator.pop(context);
+
+                AllRoutes.routeToshowalarm();
+              }),
+          const Divider(),
+          ListTile(title: const Text("Settings"), onTap: () => {}),
+          ListTile(
+              leading: Icon(Icons.add_to_home_screen, color: context.watch<ThemeProvider>().themecolor),
+              title: const Text("Import Data"),
+              onTap: () {
+                Navigator.pop(context);
+                Dialogs.importData(context);
+              }),
+          ListTile(
+              leading: Icon(Icons.sync, color: context.watch<ThemeProvider>().themecolor),
+              title: const Text("Sync Data"),
+              onTap: () {
+                Navigator.pop(context);
+                Dialogs.syncData(context);
+              }),
+          ListTile(
+              leading: Icon(Icons.settings, color: context.watch<ThemeProvider>().themecolor),
+              title: const Text("All Settings"),
+              onTap: () {
+                Navigator.pop(context);
+                Get.to(() => const Settings(), transition: gets.Transition.rightToLeftWithFade);
+              }),
+        ],
+      ),
+    );
+  }
+
   Row reminderrow() {
+    var totalblc = context.watch<ExpenseProvider>().totalblc;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -242,7 +319,7 @@ class _HomeState extends State<Home> {
             height: 50,
             child: ElevatedButton(
                 onPressed: () {
-                  gets.Get.to(() => const AlarmMain(), transition: gets.Transition.downToUp);
+                  AllRoutes.routeToshowalarm();
                 },
                 style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: Colors.white),
                 child: Row(children: const [
@@ -259,12 +336,7 @@ class _HomeState extends State<Home> {
             height: 50,
             child: ElevatedButton(
                 onPressed: () {
-                  gets.Get.to(
-                      () => ShowExpenses(
-                            totalblc: context.watch<ExpenseProvider>().totalblc,
-                          ),
-                      transition: gets.Transition.rightToLeftWithFade,
-                      duration: const Duration(milliseconds: 500));
+                  AllRoutes.routeToshowExpenses(totalblc);
                 },
                 style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: Colors.white),
                 child: Row(children: const [

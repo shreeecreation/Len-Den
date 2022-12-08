@@ -5,16 +5,19 @@ import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
 import 'package:merokarobar/Theme/theme.dart';
+import 'package:merokarobar/ThemeManager/themeprovider.dart';
 
-class ShowExpense extends StatelessWidget {
-  const ShowExpense({
+class ShowOutgoings extends StatelessWidget {
+  const ShowOutgoings({
     super.key,
   });
   @override
   Widget build(BuildContext context) {
+    Color? primaryColor = context.watch<ThemeProvider>().themecolor;
+
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: CTheme.kPrimaryColor,
+          backgroundColor: primaryColor,
           title: const Text("Outgoings "),
           elevation: 0,
         ),
@@ -22,7 +25,7 @@ class ShowExpense extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              header(context, context.watch<BlcProvider>().totalblc.toString()),
+              header(context, context.watch<BlcProvider>().totalblc.toString(), primaryColor),
               const SizedBox(height: 10),
               const Text("  All Outgoings", style: TextStyle(fontSize: 19)),
               SizedBox(
@@ -70,9 +73,9 @@ class ShowExpense extends StatelessWidget {
         ));
   }
 
-  Stack header(BuildContext context, blc) {
+  Stack header(BuildContext context, blc, var primaryColor) {
     return Stack(children: [
-      Container(color: CTheme.kPrimaryColor, height: MediaQuery.of(context).size.height / 5),
+      Container(color: primaryColor, height: MediaQuery.of(context).size.height / 5),
       Positioned(
           left: 10,
           child: SizedBox(

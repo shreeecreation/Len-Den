@@ -14,6 +14,7 @@ class EditReceived extends StatefulWidget {
   final Map<String, dynamic> model;
   String modeString;
   int mode;
+  // ignore: prefer_typing_uninitialized_variables
   var totalblc;
   EditReceived({super.key, required this.totalblc, required this.username, required this.model, required this.modeString, required this.mode});
 

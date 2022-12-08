@@ -1,27 +1,37 @@
 // ignore_for_file: camel_case_types
 
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:merokarobar/Add%20Todos/Presentation/addtodos.dart';
 import 'package:merokarobar/Add%20Todos/Presentation/addtodosoutgoing.dart';
 import 'package:merokarobar/EditData/Presentation/editdata.dart';
 import 'package:merokarobar/EditData/Presentation/editreceivedoutgoing.dart';
 import 'package:merokarobar/Expenses/expenses.dart';
-import 'package:merokarobar/Home/Presentation/home.dart';
-import 'package:merokarobar/Home/Presentation/showexpense.dart';
+import 'package:merokarobar/Home/Presentation/showoutgoings.dart';
 import 'package:merokarobar/Home/Presentation/showincome.dart';
 import 'package:merokarobar/Login/Presentation/home.dart';
 import 'package:merokarobar/Login/Presentation/otp.dart';
+import 'package:page_transition/page_transition.dart';
 
 class router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final arguments = settings.arguments;
     switch (settings.name) {
-      case "/":
+      case "home":
         return MaterialPageRoute(
           builder: (_) => const HomePage(),
         );
-      case "home":
-        return MaterialPageRoute(builder: (_) => const Home());
+      case "/":
+        return MaterialPageRoute(
+            builder: (_) => AnimatedSplashScreen(
+                  splash: "assets/Images/logo.png",
+                  splashIconSize: 150,
+                  duration: 2000,
+                  nextScreen: const HomePage(),
+                  curve: Curves.linearToEaseOut,
+                  splashTransition: SplashTransition.fadeTransition,
+                  pageTransitionType: PageTransitionType.fade,
+                ));
       case "addtodo":
         return MaterialPageRoute(builder: (_) => AddTodos());
       case "addexpense":
@@ -31,7 +41,7 @@ class router {
       case "showincome":
         return MaterialPageRoute(builder: (_) => const ShowIncome());
       case "showexpenses":
-        return MaterialPageRoute(builder: (_) => const ShowExpense());
+        return MaterialPageRoute(builder: (_) => const ShowOutgoings());
       case "editr":
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(

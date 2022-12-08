@@ -5,17 +5,16 @@ import 'package:merokarobar/Alarm/app/data/models/menu_info.dart';
 import 'package:merokarobar/Alarm/app/data/theme_data.dart';
 import 'package:merokarobar/Alarm/app/modules/views/clock_page.dart';
 import 'package:provider/provider.dart';
-
 import 'alarm_page.dart';
 
 class AlarmMain extends StatefulWidget {
   const AlarmMain({super.key});
 
   @override
-  _AlarmMainState createState() => _AlarmMainState();
+  AlarmMainState createState() => AlarmMainState();
 }
 
-class _AlarmMainState extends State<AlarmMain> {
+class AlarmMainState extends State<AlarmMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

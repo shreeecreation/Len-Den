@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:merokarobar/Alarm/app/data/models/alarm_info.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -31,8 +33,7 @@ class AlarmHelper {
       path,
       version: 1,
       onCreate: (db, version) {
-        db.execute(
-            '''
+        db.execute('''
           create table $tableAlarm ( 
           $columnId integer primary key autoincrement, 
           $columnTitle text not null,
@@ -48,7 +49,6 @@ class AlarmHelper {
   void insertAlarm(AlarmInfo alarmInfo) async {
     var db = await database;
     var result = await db.insert(tableAlarm, alarmInfo.toMap());
-    print('result : $result');
   }
 
   Future<List<AlarmInfo>> getAlarms() async {

@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:merokarobar/Database/database.dart';
 
 import 'package:merokarobar/Database/model.dart';
-import 'package:merokarobar/Theme/theme.dart';
+import 'package:merokarobar/ThemeManager/themeprovider.dart';
 import 'package:merokarobar/Utils/dialog.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class AddTodos extends StatelessWidget {
@@ -19,10 +20,11 @@ class AddTodos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color? primaryColor = context.watch<ThemeProvider>().themecolor;
     return Scaffold(
         appBar: AppBar(
           title: const Text("Add New Party (Receiving)"),
-          backgroundColor: CTheme.kPrimaryColor,
+          backgroundColor: primaryColor,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -37,7 +39,7 @@ class AddTodos extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 2,
-                    child: savebutton(context),
+                    child: savebutton(context, primaryColor),
                   ),
                 ],
               ),
@@ -46,9 +48,9 @@ class AddTodos extends StatelessWidget {
         ));
   }
 
-  ElevatedButton savebutton(BuildContext context) {
+  ElevatedButton savebutton(BuildContext context, var primaryColor) {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
+        style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
         onPressed: () async {
           if (formGlobalKey.currentState!.validate() && formGlobalKey2.currentState!.validate()) {
             Dialogs.showAlertDialog(context);

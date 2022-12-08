@@ -7,7 +7,6 @@ import 'model.dart';
 class EditDatabaseHelper {
   static final EditDatabaseHelper instance = EditDatabaseHelper();
   static late String databasepath;
-  static Database? _database;
 
   static Future<Database> initDatabase(String pathname) async {
     databasepath = pathname;
@@ -51,11 +50,10 @@ class EditDatabaseHelper {
     return await db.insert(databasepath, grocery.toMap());
   }
 
-  Future<int> deleteparty(int id, String pathname) async {
+  static Future<int> deleteparty(String pathname) async {
     Database database = await initDatabase(pathname);
-
     Database? db = database;
-    return await db.rawDelete('DELETE FROM $databasepath WHERE id = $id');
+    return await db.rawDelete('DELETE FROM $databasepath WHERE name = $pathname');
   }
 
   static void deleteDatabase() async {

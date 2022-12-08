@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:merokarobar/Expenses/services/expensedialog.dart';
 import 'package:merokarobar/Expenses/services/model.dart';
-import 'package:merokarobar/Theme/theme.dart';
+import 'package:merokarobar/ThemeManager/themeprovider.dart';
 
 import 'services/database.dart';
 
@@ -11,9 +12,11 @@ class ShowExpenses extends StatelessWidget {
   final int totalblc;
   @override
   Widget build(BuildContext context) {
+    Color? primaryColor = context.watch<ThemeProvider>().themecolor;
+
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: CTheme.kPrimaryColor,
+          backgroundColor: primaryColor,
           title: const Text("Expense Manager"),
           elevation: 0,
         ),
@@ -21,7 +24,7 @@ class ShowExpenses extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              header(context, totalblc.toString()),
+              header(context, totalblc.toString(), primaryColor),
               const SizedBox(height: 10),
               const Text("  All Expenses", style: TextStyle(fontSize: 19)),
               SizedBox(
@@ -62,7 +65,7 @@ class ShowExpenses extends StatelessWidget {
                                                       snapshot.data![index].notes,
                                                       context,
                                                       snapshot.data![index],
-                                                      snapshot.data![index].id!)),
+                                                      snapshot.data![index].id!,primaryColor)),
                                             )),
                                         const Divider(),
                                       ],
@@ -76,9 +79,9 @@ class ShowExpenses extends StatelessWidget {
         ));
   }
 
-  Stack header(BuildContext context, blc) {
+  Stack header(BuildContext context, blc, var primaryColor) {
     return Stack(children: [
-      Container(color: CTheme.kPrimaryColor, height: MediaQuery.of(context).size.height / 5),
+      Container(color: primaryColor, height: MediaQuery.of(context).size.height / 5),
       Positioned(
           left: 10,
           child: SizedBox(
@@ -97,7 +100,7 @@ class ShowExpenses extends StatelessWidget {
                           height: 35,
                           width: 160,
                           child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
+                              style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
                               onPressed: () {},
                               child: const Text("Minimize Expense"))),
                     ])),
@@ -105,7 +108,7 @@ class ShowExpenses extends StatelessWidget {
     ]);
   }
 
-  Card cardView1(date, blc, category, payment, notes, BuildContext context, ExpensesModel expense, int index) {
+  Card cardView1(date, blc, category, payment, notes, BuildContext context, ExpensesModel expense, int index,var primaryColor) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -128,7 +131,7 @@ class ShowExpenses extends StatelessWidget {
               onPressed: () {
                 ExpenseDialog.showAlertDialog(context, expense, index);
               },
-              style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(8), backgroundColor: CTheme.kPrimaryColor // <-- Button color
+              style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(8), backgroundColor: primaryColor // <-- Button color
                   ),
               child: const Text("More Details"),
             ),

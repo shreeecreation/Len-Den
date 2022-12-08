@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
-import 'package:merokarobar/Theme/theme.dart';
+import 'package:merokarobar/ThemeManager/themeprovider.dart';
 import 'package:merokarobar/Utils/dialog.dart';
 
 // ignore: must_be_immutable
@@ -18,10 +19,12 @@ class AddTodosOut extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color? primaryColor = context.watch<ThemeProvider>().themecolor;
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Add New Party (Outgoing)"),
-          backgroundColor: CTheme.kPrimaryColor,
+          backgroundColor: primaryColor,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -37,7 +40,7 @@ class AddTodosOut extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 2,
-                    child: savebutton(context),
+                    child: savebutton(context, primaryColor),
                   ),
                 ],
               ),
@@ -46,9 +49,9 @@ class AddTodosOut extends StatelessWidget {
         ));
   }
 
-  Widget savebutton(BuildContext context) {
+  Widget savebutton(BuildContext context, var primaryColor) {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
+        style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
         onPressed: () async {
           if (formGlobalKey.currentState!.validate() && formGlobalKey2.currentState!.validate()) {
             Dialogs.showAlertDialog(context);
