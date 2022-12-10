@@ -7,6 +7,7 @@ import 'package:merokarobar/Alarm/app/data/models/menu_info.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
 import 'package:merokarobar/Home/bloc/list_bloc.dart';
 import 'package:merokarobar/ThemeManager/themeprovider.dart';
+import 'package:merokarobar/firebase/internet/checkconnectivity.dart';
 import 'package:provider/provider.dart';
 import 'Alarm/app/data/enums.dart';
 import 'Routes/routes.dart';
@@ -30,6 +31,7 @@ void main() async {
     ChangeNotifierProvider(create: (_) => BlcProvider()),
     ChangeNotifierProvider(create: (_) => ExpenseProvider()),
     ChangeNotifierProvider(create: (_) => ThemeProvider()),
+    ChangeNotifierProvider(create: (_) => CheckInternet()),
     ChangeNotifierProvider<MenuInfo>(
       create: (context) => MenuInfo(MenuType.clock),
     ),

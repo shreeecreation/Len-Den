@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:merokarobar/Authentication/service/signin.dart';
+import 'package:merokarobar/Database/database.dart';
 import 'package:pinput/pinput.dart';
 
 // ignore: must_be_immutable
@@ -63,6 +64,7 @@ class OTP extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green.shade600, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     onPressed: () {
+                      DatabaseHelper.initDatabase();
                       SignIn.verifyPin(verifypin, context, verificationId);
                     },
                     child: const Text("Verify Phone Number")),

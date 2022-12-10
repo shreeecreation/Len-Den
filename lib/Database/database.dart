@@ -9,9 +9,9 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   static Database? _database;
-  Future<Database> get database async => _database ??= await _initDatabase();
+  Future<Database> get database async => _database ??= await initDatabase();
 
-  static Future<Database> _initDatabase() async {
+  static Future<Database> initDatabase() async {
     final appStorage = await getExternalStorageDirectory();
 
     String path = join(appStorage!.path, 'groceriess.db');
@@ -85,9 +85,8 @@ class DatabaseHelper {
     return await db.rawUpdate('UPDATE groceriess SET totalblc = $balance  where id = $id ');
   }
 
-  static void deleteDatabase() async {
-    final appStorage = await getExternalStorageDirectory();
-    String path = join(appStorage!.path, 'groceriess.db');
-    databaseFactory.deleteDatabase(path);
+  static Future<void> deleteDatabase() async {
+    Database db = await instance.database;
+    db.delete("groceriess");
   }
 }

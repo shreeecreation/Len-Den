@@ -7,6 +7,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart' as gets;
 import 'package:get/get.dart';
+import 'package:merokarobar/Authentication/service/logout.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
@@ -16,6 +17,7 @@ import 'package:merokarobar/Settings/settings.dart';
 import 'package:merokarobar/Theme/theme.dart';
 import 'package:merokarobar/ThemeManager/themeprovider.dart';
 import 'package:merokarobar/Utils/dialog.dart';
+import 'package:merokarobar/firebase/internet/checkconnectivity.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -45,6 +47,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     User? auth = FirebaseAuth.instance.currentUser;
     Color? primaryColor = context.watch<ThemeProvider>().themecolor;
     return Scaffold(
@@ -284,16 +287,17 @@ class _HomeState extends State<Home> {
           ListTile(
               leading: Icon(Icons.add_to_home_screen, color: context.watch<ThemeProvider>().themecolor),
               title: const Text("Import Data"),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                Dialogs.importData(context);
+
+                await context.read<CheckInternet>().checkConnectivity() ? Dialogs.importData(context) : Dialogs.noInternet(context);
               }),
           ListTile(
               leading: Icon(Icons.sync, color: context.watch<ThemeProvider>().themecolor),
               title: const Text("Sync Data"),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                Dialogs.syncData(context);
+                await context.read<CheckInternet>().checkConnectivity() ? Dialogs.syncData(context) : Dialogs.noInternet(context);
               }),
           ListTile(
               leading: Icon(Icons.settings, color: context.watch<ThemeProvider>().themecolor),
@@ -301,6 +305,15 @@ class _HomeState extends State<Home> {
               onTap: () {
                 Navigator.pop(context);
                 Get.to(() => const Settings(), transition: gets.Transition.rightToLeftWithFade);
+              }),
+          const Divider(),
+          ListTile(title: const Text("Account"), onTap: () => {}),
+          ListTile(
+              leading: Icon(Icons.logout, color: context.watch<ThemeProvider>().themecolor),
+              title: const Text("Logout"),
+              onTap: () async {
+                Navigator.pop(context);
+                LogOut.logOut();
               }),
         ],
       ),
