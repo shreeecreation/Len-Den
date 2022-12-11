@@ -53,13 +53,14 @@ class HomePage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  SizedBox(height: 10),
                   SizedBox(
                       height: 100, width: MediaQuery.of(context).size.width / 2, child: Image.asset("assets/Images/logo.png", fit: BoxFit.fitWidth)),
                 ],
               ),
             ),
             SizedBox(
-                height: MediaQuery.of(context).size.height / 2,
+                height: MediaQuery.of(context).size.height / 2.2,
                 width: MediaQuery.of(context).size.width - 50,
                 child: Image.asset(
                   "assets/Images/verify.png",

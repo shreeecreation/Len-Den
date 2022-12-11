@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart' as gets;
+import 'package:get/get.dart';
 import 'package:merokarobar/ThemeManager/themeprovider.dart';
+import 'package:merokarobar/Utils/comingsoon.dart';
 import 'package:merokarobar/Utils/dialog.dart';
 
 class Settings extends StatelessWidget {
@@ -40,6 +42,9 @@ class Settings extends StatelessWidget {
           SizedBox(
             height: 70,
             child: ListTile(
+              onTap: () {
+                Get.to(() => ComingSoon());
+              },
               title: const Text("Account Settings"),
               subtitle: const Text("Name, Personal Details", style: subtitleStyle),
               trailing: Icon(Icons.chevron_right_sharp, color: context.watch<ThemeProvider>().themecolor),
@@ -50,6 +55,9 @@ class Settings extends StatelessWidget {
           SizedBox(
             height: 70,
             child: ListTile(
+              onTap: () {
+                Get.to(() => ComingSoon());
+              },
               title: const Text("About"),
               subtitle: const Text("Len Den App, Privacy Policy, Terms & Conditions", style: subtitleStyle),
               trailing: Icon(Icons.chevron_right_sharp, color: context.watch<ThemeProvider>().themecolor),
@@ -97,6 +105,9 @@ class AppSettings extends StatelessWidget {
           SizedBox(
             height: 70,
             child: ListTile(
+              onTap: () {
+                Get.to(() => ComingSoon());
+              },
               title: const Text("App Lock"),
               trailing: Icon(Icons.chevron_right_sharp, color: context.watch<ThemeProvider>().themecolor),
             ),
@@ -105,6 +116,9 @@ class AppSettings extends StatelessWidget {
           SizedBox(
             height: 70,
             child: ListTile(
+              onTap: () {
+                Get.to(() => ComingSoon());
+              },
               title: const Text("About"),
               trailing: Icon(Icons.chevron_right_sharp, color: context.watch<ThemeProvider>().themecolor),
             ),

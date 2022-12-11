@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:get/get.dart';
 import 'package:merokarobar/Expenses/services/expensedialog.dart';
 import 'package:merokarobar/Expenses/services/model.dart';
 import 'package:merokarobar/ThemeManager/themeprovider.dart';
+import 'package:merokarobar/tutorial/tutorial.dart';
 
 import 'services/database.dart';
 
@@ -65,7 +67,8 @@ class ShowExpenses extends StatelessWidget {
                                                       snapshot.data![index].notes,
                                                       context,
                                                       snapshot.data![index],
-                                                      snapshot.data![index].id!,primaryColor)),
+                                                      snapshot.data![index].id!,
+                                                      primaryColor)),
                                             )),
                                         const Divider(),
                                       ],
@@ -101,14 +104,16 @@ class ShowExpenses extends StatelessWidget {
                           width: 160,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.to(() => Tutorial(mode: false));
+                              },
                               child: const Text("Minimize Expense"))),
                     ])),
               ]))))
     ]);
   }
 
-  Card cardView1(date, blc, category, payment, notes, BuildContext context, ExpensesModel expense, int index,var primaryColor) {
+  Card cardView1(date, blc, category, payment, notes, BuildContext context, ExpensesModel expense, int index, var primaryColor) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),

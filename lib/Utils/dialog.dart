@@ -11,6 +11,7 @@ import 'package:merokarobar/ThemeManager/themeprovider.dart';
 import 'package:merokarobar/firebase/ImportData/import.dart';
 import 'package:merokarobar/firebase/SyncData/sync.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:restart_app/restart_app.dart';
 
 class Dialogs {
   static Future<void> showAlertDialog(BuildContext context) async {
@@ -18,12 +19,13 @@ class Dialogs {
         barrierColor: Colors.black.withOpacity(0.5),
         transitionBuilder: (context, a1, a2, widget) {
           final curvedValue = Curves.easeInOutBack.transform(a1.value) - 1.0;
+          Color? primaryColor = context.watch<ThemeProvider>().themecolor;
           return Transform(
             transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
             child: Opacity(
               opacity: a1.value,
               child: AlertDialog(
-                backgroundColor: CTheme.kPrimaryColor,
+                backgroundColor: primaryColor,
                 shape: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
                 title: const Text('Record Added Successfully'),
                 content: Row(
@@ -95,7 +97,7 @@ class Dialogs {
           child: AlertDialog(
             title: Text("Setteled", style: TextStyle(color: CTheme.kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 20)),
             content: SizedBox(
-              height: 100,
+              height: 80,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -394,8 +396,8 @@ class Dialogs {
                     onPressed: () {
                       Get.offAll(() => HomePage());
 
-                      // Restart.restartApp(webOrigin: '/');
-                      Get.offAll(() => HomePage());
+                      Restart.restartApp(webOrigin: '/');
+                      // Get.offAll(() => HomePage());
                     },
                     child: const Text(
                       "Restart",
@@ -501,21 +503,26 @@ class Dialogs {
       },
       transitionBuilder: (ctx, a1, a2, child) {
         var curve = Curves.easeInOut.transform(a1.value);
-        return Transform.scale(
-          scale: curve,
-          child: AlertDialog(
-            content: SizedBox(
-              height: 50,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // SizedBox(height: 10),
-                  LinearProgressIndicator(
-                    color: Colors.green,
-                  ),
-                  SizedBox(height: 10),
-                  // Text("Loading...", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Colors.black45))
-                ],
+        return WillPopScope(
+          onWillPop: () {
+            return Future.value(false);
+          },
+          child: Transform.scale(
+            scale: curve,
+            child: AlertDialog(
+              content: SizedBox(
+                height: 50,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // SizedBox(height: 10),
+                    LinearProgressIndicator(
+                      color: Colors.green,
+                    ),
+                    SizedBox(height: 10),
+                    // Text("Loading...", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Colors.black45))
+                  ],
+                ),
               ),
             ),
           ),

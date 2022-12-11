@@ -250,7 +250,7 @@ class _HomeState extends State<Home> {
           UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: context.watch<ThemeProvider>().themecolor),
               currentAccountPicture: const Icon(Icons.face, size: 48.0, color: Colors.white),
-              accountName: const Text("H. A. Smrity"),
+              accountName: const Text("Coming soon"),
               accountEmail: Text(auth!.phoneNumber ?? "dasd")),
           ListTile(title: const Text("App Features"), onTap: () => {}),
           ListTile(

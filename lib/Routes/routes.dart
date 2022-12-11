@@ -25,7 +25,7 @@ class router {
         return MaterialPageRoute(
             builder: (_) => AnimatedSplashScreen(
                   splash: "assets/Images/logo.png",
-                  splashIconSize: 150,
+                  splashIconSize: 200,
                   duration: 2000,
                   nextScreen: HomePage(),
                   curve: Curves.linearToEaseOut,

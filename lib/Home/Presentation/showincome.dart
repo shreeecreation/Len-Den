@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:get/get.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
 import 'package:merokarobar/Theme/theme.dart';
 import 'package:merokarobar/ThemeManager/themeprovider.dart';
+import 'package:merokarobar/tutorial/tutorial.dart';
 
 class ShowIncome extends StatelessWidget {
   const ShowIncome({
@@ -95,7 +97,9 @@ class ShowIncome extends StatelessWidget {
                           width: 160,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.to(() => Tutorial(mode: true));
+                              },
                               child: const Text("Increase Incomes"))),
                     ])),
               ]))))
@@ -103,6 +107,11 @@ class ShowIncome extends StatelessWidget {
   }
 
   Card cardView0(date, totalblc, currentblc, name, number) {
+    var blc = currentblc - totalblc;
+    if (blc < 0) {
+      blc = 0;
+    }
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(5.0),
@@ -124,7 +133,7 @@ class ShowIncome extends StatelessWidget {
               children: [
                 Text(" Total Rs. $currentblc", style: TextStyle(color: CTheme.kPrimaryColor, fontSize: 16)),
                 const SizedBox(height: 15),
-                Text(" Received Rs. ${currentblc - totalblc}", style: TextStyle(color: CTheme.kPrimaryColor, fontSize: 15)),
+                Text(" Received Rs. ${blc}", style: TextStyle(color: CTheme.kPrimaryColor, fontSize: 15)),
               ],
             )),
       ),

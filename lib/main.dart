@@ -17,10 +17,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Color? primaryColor = context.watch<ThemeProvider>().themecolor;
-
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    // systemNavigationBarColor: Colors.blue, // navigation bar color
     statusBarColor: Colors.transparent, // status bar color
   ));
   var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -58,12 +55,6 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => ListBloc()..add(ListfetchingEvent())),
         ],
         child: GetMaterialApp(
-            //         SystemChrome.setSystemUIOverlayStyle(
-            // SystemUiOverlayStyle(
-            //   statusBarColor: Colors.blue,
-            //   statusBarBrightness: Brightness.light,
-            // ),),
-
             title: 'Flutter Demo',
             theme: ThemeData(
               primarySwatch: Colors.blue,

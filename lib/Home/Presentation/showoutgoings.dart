@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:get/get.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
 import 'package:merokarobar/Theme/theme.dart';
 import 'package:merokarobar/ThemeManager/themeprovider.dart';
+import 'package:merokarobar/tutorial/tutorial.dart';
 
 class ShowOutgoings extends StatelessWidget {
   const ShowOutgoings({
@@ -95,7 +97,9 @@ class ShowOutgoings extends StatelessWidget {
                           width: 160,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.to(() => Tutorial(mode: false));
+                              },
                               child: const Text("Decrease Expenses"))),
                     ])),
               ]))))
