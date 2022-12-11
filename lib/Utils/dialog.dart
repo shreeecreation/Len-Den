@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart' as gets;
 import 'package:get/get.dart';
+import 'package:merokarobar/Authentication/service/logout.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/editdatabase.dart/editdatabase.dart';
 import 'package:merokarobar/Login/Presentation/home.dart';
@@ -33,7 +34,7 @@ class Dialogs {
                         onPressed: () async {
                           Navigator.pop(context);
                           await Future.delayed(const Duration(milliseconds: 500));
-                          gets.Get.offAll(() => const HomePage(), transition: gets.Transition.downToUp);
+                          gets.Get.offAll(() => HomePage(), transition: gets.Transition.downToUp);
                         },
                         child: const Text("Ok")),
                   ],
@@ -120,7 +121,7 @@ class Dialogs {
                     EditDatabaseHelper.deleteDatabase();
                     Navigator.of(context).pop();
                     await Future.delayed(const Duration(milliseconds: 500));
-                    gets.Get.offAll(() => const HomePage());
+                    gets.Get.offAll(() => HomePage());
                   },
                   child: const Text("Delete", style: TextStyle(color: Colors.white, fontSize: 16)))
             ],
@@ -271,7 +272,9 @@ class Dialogs {
                     style: TextStyle(color: Colors.green, fontSize: 16),
                   )),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                   child: const Text(
                     "Cancel",
                     style: TextStyle(color: Colors.red, fontSize: 16),
@@ -389,6 +392,8 @@ class Dialogs {
               actions: <Widget>[
                 TextButton(
                     onPressed: () {
+                      Get.offAll(() => HomePage());
+
                       // Restart.restartApp(webOrigin: '/');
                       Get.offAll(() => HomePage());
                     },
@@ -481,6 +486,138 @@ class Dialogs {
                     style: TextStyle(color: Colors.green, fontSize: 16),
                   )),
             ],
+          ),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+    );
+  }
+
+  static void loading(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, a1, a2, child) {
+        var curve = Curves.easeInOut.transform(a1.value);
+        return Transform.scale(
+          scale: curve,
+          child: AlertDialog(
+            content: SizedBox(
+              height: 50,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // SizedBox(height: 10),
+                  LinearProgressIndicator(
+                    color: Colors.green,
+                  ),
+                  SizedBox(height: 10),
+                  // Text("Loading...", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Colors.black45))
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+    );
+  }
+
+  static void syncDatalogout(BuildContext context) {
+    showGeneralDialog(
+      barrierDismissible: false,
+      context: context,
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, a1, a2, child) {
+        var curve = Curves.easeInOut.transform(a1.value);
+        return Transform.scale(
+          scale: curve,
+          child: AlertDialog(
+            // title: const Text("Sync Data", style: TextStyle(color: Colors.green, fontWeight: FontWeight.w700)),
+            content: const Text("Sync Your Data ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+            actions: <Widget>[
+              OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    // backgroundColor: Colors.black, //<-- SEE HERE
+                    side: BorderSide(color: Colors.green, width: 1),
+                  ),
+                  onPressed: () async {
+                    final appStorage = await getExternalStorageDirectory();
+
+                    SyncData.uploadFolderlogout(appStorage, context);
+
+                    Navigator.of(context).pop();
+                    Dialogs.importDownloadIndicator(context, "Syncing");
+                  },
+                  child: const Text(
+                    "Sync",
+                    style: TextStyle(color: Colors.green, fontSize: 16),
+                  )),
+              OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: Colors.red, width: 1),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.red, fontSize: 16),
+                  )),
+            ],
+          ),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+    );
+  }
+
+  static void logOut(BuildContext context) {
+    showGeneralDialog(
+      barrierDismissible: false,
+      context: context,
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, a1, a2, child) {
+        var curve = Curves.easeInOut.transform(a1.value);
+        return WillPopScope(
+          onWillPop: () {
+            return Future.value(false);
+          },
+          child: Transform.scale(
+            scale: curve,
+            child: AlertDialog(
+              title: const Text("Log Out", style: TextStyle(color: Colors.green, fontWeight: FontWeight.w700)),
+              content: const Text("Do you sure want to log out ?", style: TextStyle(fontWeight: FontWeight.w600)),
+              actions: <Widget>[
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      LogOut.logOut();
+                    },
+                    child: const Text(
+                      "Log Out",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    )),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.greenAccent),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    )),
+              ],
+            ),
           ),
         );
       },

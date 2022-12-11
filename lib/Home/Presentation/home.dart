@@ -7,7 +7,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart' as gets;
 import 'package:get/get.dart';
-import 'package:merokarobar/Authentication/service/logout.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
@@ -52,14 +51,18 @@ class _HomeState extends State<Home> {
     Color? primaryColor = context.watch<ThemeProvider>().themecolor;
     return Scaffold(
         floatingActionButton: floatingButtons(primaryColor),
-        appBar: AppBar(backgroundColor: primaryColor, elevation: 0, title: const Text("Shree Krishna Shrestha"), actions: [
-          GestureDetector(
-              onTap: () {
-                DatabaseHelper.deleteDatabase();
-              },
-              child: const Icon(Icons.sync)),
-          const SizedBox(width: 20)
-        ]),
+        appBar: AppBar(
+            backgroundColor: primaryColor,
+            elevation: 0,
+            title: const Text("Len Den", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22)),
+            actions: [
+              GestureDetector(
+                  onTap: () async {
+                    await context.read<CheckInternet>().checkConnectivity() ? Dialogs.syncData(context) : Dialogs.noInternet(context);
+                  },
+                  child: const Icon(Icons.sync)),
+              const SizedBox(width: 20)
+            ]),
         drawer: homeDrawer(context, auth),
         body: SingleChildScrollView(
           child: Column(
@@ -313,7 +316,7 @@ class _HomeState extends State<Home> {
               title: const Text("Logout"),
               onTap: () async {
                 Navigator.pop(context);
-                LogOut.logOut();
+                await context.read<CheckInternet>().checkConnectivity() ? Dialogs.syncDatalogout(context) : Dialogs.noInternet(context);
               }),
         ],
       ),

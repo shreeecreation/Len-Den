@@ -68,8 +68,7 @@ class ExpenseDatabaseHelper {
   }
 
   static void deleteDatabase() async {
-    final appStorage = await getExternalStorageDirectory();
-    String path = join(appStorage!.path, 'expense.db');
-    databaseFactory.deleteDatabase(path);
+    Database db = await instance.database;
+    db.delete("expense+");
   }
 }

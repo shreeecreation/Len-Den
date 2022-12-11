@@ -19,7 +19,7 @@ class router {
     switch (settings.name) {
       case "home":
         return MaterialPageRoute(
-          builder: (_) => const HomePage(),
+          builder: (_) => HomePage(),
         );
       case "/":
         return MaterialPageRoute(
@@ -27,7 +27,7 @@ class router {
                   splash: "assets/Images/logo.png",
                   splashIconSize: 150,
                   duration: 2000,
-                  nextScreen: const HomePage(),
+                  nextScreen: HomePage(),
                   curve: Curves.linearToEaseOut,
                   splashTransition: SplashTransition.fadeTransition,
                   pageTransitionType: PageTransitionType.fade,

@@ -9,6 +9,7 @@ class LogOut {
     deleteCacheDir();
     deleteAppDir();
     DatabaseHelper.deleteDatabase();
+
     await FirebaseAuth.instance.signOut();
   }
 
@@ -22,13 +23,9 @@ class LogOut {
 
   static Future<void> deleteAppDir() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    // Directory? appExternalDirectory = await getExternalStorageDirectory();
 
     if (appDocDir.existsSync()) {
       appDocDir.deleteSync(recursive: true);
     }
-    // if (appExternalDirectory!.existsSync()) {
-    //   appExternalDirectory.deleteSync(recursive: true);
-    // }
   }
 }

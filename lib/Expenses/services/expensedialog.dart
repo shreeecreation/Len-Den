@@ -23,23 +23,28 @@ class ExpenseDialog {
                   width: MediaQuery.of(context).size.width / 1.1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Total Expenses : ${expense.blc!.toString()}", style: const TextStyle(fontSize: 17)),
-                      const SizedBox(height: 10),
-                      Text(
-                        expense.date!,
-                        textAlign: TextAlign.center,
+                      Column(
+                        children: [
+                          Text("Total Expenses : ${expense.blc!.toString()}", style: const TextStyle(fontSize: 17)),
+                          const SizedBox(height: 10),
+                          Text(
+                            expense.date!,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            "Payment Method : ${expense.payment!}",
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            "Additional Notes : ${expense.notes!}",
+                          ),
+                          const SizedBox(height: 10),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        "Payment Method : ${expense.payment!}",
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        "Additional Notes : ${expense.notes!}",
-                      ),
-                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -52,7 +57,7 @@ class ExpenseDialog {
                           ElevatedButton(
                               onPressed: () {
                                 ExpenseDatabaseHelper.deleteparty(index);
-                                Get.offAll(() => const HomePage());
+                                Get.offAll(() => HomePage());
                               },
                               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                               child: const Text("Delete")),

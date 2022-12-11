@@ -25,6 +25,14 @@ class ImportData {
         // Download the file to the local storage
         file.writeToFile(File(localFilePath)).whenComplete(() {});
       }
+      for (var file in files.items) {
+        String fileName = file.name;
+        String localPath = (await getExternalStorageDirectory())!.path;
+        String localFilePath = '$localPath/$fileName';
+
+        // Download the file to the local storage
+        file.writeToFile(File(localFilePath)).whenComplete(() {});
+      }
       Dialogs.showDownloadedDialog(context);
     }
   }
