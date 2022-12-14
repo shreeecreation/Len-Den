@@ -27,7 +27,7 @@ class ShowOutgoings extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              header(context, context.watch<BlcProvider>().totalblc.toString(), primaryColor),
+              header(context, context.watch<BlcProvider>().paidblc.toString(), primaryColor),
               const SizedBox(height: 10),
               const Text("  All Outgoings", style: TextStyle(fontSize: 19)),
               SizedBox(

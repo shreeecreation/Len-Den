@@ -13,7 +13,7 @@ class AllRoutes {
   }
 
   static routeToshowExpenses(var totalblc) {
-    Get.to(() => ShowExpenses(totalblc: totalblc), transition: Transition.rightToLeftWithFade, duration: const Duration(milliseconds: 300));
+    Get.to(() => ShowExpenses(totalblc: totalblc), transition: Transition.downToUp, duration: const Duration(milliseconds: 300));
   }
 
   static routeToshowOutgoings() {

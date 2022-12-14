@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:merokarobar/Authentication/service/signin.dart';
 import 'package:merokarobar/Database/database.dart';
+import 'package:merokarobar/Expenses/services/database.dart';
 import 'package:merokarobar/Utils/dialog.dart';
 import 'package:merokarobar/firebase/internet/checkconnectivity.dart';
 import 'package:pinput/pinput.dart';
@@ -68,6 +69,7 @@ class OTP extends StatelessWidget {
                         backgroundColor: Colors.green.shade600, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     onPressed: () async {
                       DatabaseHelper.initDatabase();
+                      ExpenseDatabaseHelper.initDatabase();
                       await context.read<CheckInternet>().checkConnectivity()
                           ? SignIn.verifyPin(verifypin, context, verificationId)
                           : Dialogs.noInternet(context);

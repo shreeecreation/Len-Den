@@ -20,7 +20,6 @@ class ShowExpenses extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: primaryColor,
           title: const Text("Expense Manager"),
-          elevation: 0,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -31,7 +30,7 @@ class ShowExpenses extends StatelessWidget {
               const Text("  All Expenses", style: TextStyle(fontSize: 19)),
               SizedBox(
                 child: FutureBuilder<List<ExpensesModel>>(
-                  future: ExpenseDatabaseHelper.instance.getPartyName(),
+                  future: ExpenseDatabaseHelper.getPartyName(),
                   builder: (BuildContext context, AsyncSnapshot<List<ExpensesModel>> snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -131,15 +130,13 @@ class ShowExpenses extends StatelessWidget {
                   child: Text("Category : $category", overflow: TextOverflow.clip, style: const TextStyle(color: Colors.red)))
             ],
           ),
-          trailing: Expanded(
-            child: ElevatedButton(
-              onPressed: () {
-                ExpenseDialog.showAlertDialog(context, expense, index);
-              },
-              style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(8), backgroundColor: primaryColor // <-- Button color
-                  ),
-              child: const Text("More Details"),
-            ),
+          trailing: ElevatedButton(
+            onPressed: () {
+              ExpenseDialog.showAlertDialog(context, expense, index);
+            },
+            style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(8), backgroundColor: primaryColor // <-- Button color
+                ),
+            child: const Text("More Details"),
           ),
         ),
       ),

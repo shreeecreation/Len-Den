@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:merokarobar/Database/database.dart';
+import 'package:merokarobar/Expenses/services/database.dart';
 import 'package:path_provider/path_provider.dart';
 
 class LogOut {
@@ -9,6 +10,7 @@ class LogOut {
     deleteCacheDir();
     deleteAppDir();
     DatabaseHelper.deleteDatabase();
+    ExpenseDatabaseHelper.deleteDatabase();
 
     await FirebaseAuth.instance.signOut();
   }

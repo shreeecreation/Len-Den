@@ -109,7 +109,6 @@ class HomePage extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(snackbar);
                     } else {
                       await context.read<CheckInternet>().checkConnectivity() ? SignIn.signIn(context, controller.text) : Dialogs.noInternet(context);
-                      Dialogs.loading(context);
                     }
                   },
                   child: const Text("GET LOGIN OTP")),

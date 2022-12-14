@@ -95,7 +95,9 @@ class AppSettings extends StatelessWidget {
               },
               title: const Text("Theme Mode"),
               trailing: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Dialogs.chooseTheme(context);
+                },
                 style: styleFrom,
                 child: const Text(""),
               ),
@@ -113,16 +115,6 @@ class AppSettings extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          SizedBox(
-            height: 70,
-            child: ListTile(
-              onTap: () {
-                Get.to(() => ComingSoon());
-              },
-              title: const Text("About"),
-              trailing: Icon(Icons.chevron_right_sharp, color: context.watch<ThemeProvider>().themecolor),
-            ),
-          )
         ],
       ),
     );

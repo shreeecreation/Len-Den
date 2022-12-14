@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:merokarobar/Login/Presentation/home.dart';
 import 'package:merokarobar/Login/Presentation/otp.dart';
+import 'package:merokarobar/Utils/dialog.dart';
 import 'package:merokarobar/Utils/snackbar.dart';
 
 class SignIn {
   static String verificationId = "";
   static FirebaseAuth auth = FirebaseAuth.instance;
   static void signIn(BuildContext context, String phoneno) async {
+    Dialogs.loading(context);
+
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: '+977-$phoneno',
         verificationCompleted: (PhoneAuthCredential credential) {

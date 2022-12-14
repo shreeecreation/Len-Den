@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
 import 'package:merokarobar/EditData/Service/blcprovider.dart';
+import 'package:merokarobar/Expenses/showexpense.dart';
 import 'package:merokarobar/Home/bloc/list_bloc.dart';
 import 'package:merokarobar/Routes/route.dart';
 import 'package:merokarobar/Settings/settings.dart';
@@ -352,7 +353,9 @@ class _HomeState extends State<Home> {
             height: 50,
             child: ElevatedButton(
                 onPressed: () {
-                  AllRoutes.routeToshowExpenses(totalblc);
+                  // AllRoutes.routeToshowExpenses(totalblc);
+    gets.Get.to(() => ShowExpenses(totalblc: totalblc), transition: gets.Transition.downToUp, duration: const Duration(milliseconds: 300));
+
                 },
                 style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: Colors.white),
                 child: Row(children: const [

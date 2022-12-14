@@ -11,7 +11,6 @@ import 'package:merokarobar/ThemeManager/themeprovider.dart';
 import 'package:merokarobar/firebase/ImportData/import.dart';
 import 'package:merokarobar/firebase/SyncData/sync.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:restart_app/restart_app.dart';
 
 class Dialogs {
   static Future<void> showAlertDialog(BuildContext context) async {
@@ -396,8 +395,8 @@ class Dialogs {
                     onPressed: () {
                       Get.offAll(() => HomePage());
 
-                      Restart.restartApp(webOrigin: '/');
-                      // Get.offAll(() => HomePage());
+                      // Restart.restartApp(webOrigin: '/');
+                      // Get.off(() => HomePage());
                     },
                     child: const Text(
                       "Restart",
@@ -516,11 +515,9 @@ class Dialogs {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // SizedBox(height: 10),
-                    LinearProgressIndicator(
-                      color: Colors.green,
-                    ),
+                    Text("Loading...", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Colors.black45)),
                     SizedBox(height: 10),
-                    // Text("Loading...", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Colors.black45))
+                    LinearProgressIndicator(color: Colors.green, backgroundColor: Colors.white),
                   ],
                 ),
               ),

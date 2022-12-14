@@ -9,9 +9,9 @@ class ExpenseDatabaseHelper {
   static final ExpenseDatabaseHelper instance = ExpenseDatabaseHelper._privateConstructor();
 
   static Database? _database;
-  Future<Database> get database async => _database ??= await _initDatabase();
+  Future<Database> get database async => _database ??= await initDatabase();
 
-  static Future<Database> _initDatabase() async {
+  static Future<Database> initDatabase() async {
     final appStorage = await getExternalStorageDirectory();
 
     String path = join(appStorage!.path, 'expense.db');
@@ -45,7 +45,7 @@ class ExpenseDatabaseHelper {
   //   return await db.rawQuery('SELECT totalblc FROM expense WHERE mode = 0');
   // }
 
-  Future<List<ExpensesModel>> getPartyName() async {
+  static Future<List<ExpensesModel>> getPartyName() async {
     Database db = await instance.database;
     var expense = await db.query('expense', orderBy: 'id');
     List<ExpensesModel> groceryList = expense.isNotEmpty ? expense.map((c) => ExpensesModel.fromMap(c)).toList() : [];
@@ -69,6 +69,6 @@ class ExpenseDatabaseHelper {
 
   static void deleteDatabase() async {
     Database db = await instance.database;
-    db.delete("expense+");
+    db.delete("expense");
   }
 }

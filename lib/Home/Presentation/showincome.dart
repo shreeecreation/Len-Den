@@ -126,7 +126,7 @@ class ShowIncome extends StatelessWidget {
                 TextButton(
                     style: TextButton.styleFrom(backgroundColor: Colors.black12),
                     onPressed: () {},
-                    child: Text("Phone No. $number", style: TextStyle(color: CTheme.kPrimaryColor)))
+                    child: Text("Phone No. $number", style: TextStyle(color: Colors.black54)))
               ],
             ),
             trailing: Column(
