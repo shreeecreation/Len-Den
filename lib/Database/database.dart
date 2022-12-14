@@ -9,9 +9,9 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   static Database? _database;
-  Future<Database> get database async => _database ??= await _initDatabase();
+  Future<Database> get database async => _database ??= await initDatabase();
 
-  static Future<Database> _initDatabase() async {
+  static Future<Database> initDatabase() async {
     final appStorage = await getExternalStorageDirectory();
 
     String path = join(appStorage!.path, 'groceriess.db');
@@ -37,6 +37,32 @@ class DatabaseHelper {
       ''');
   }
 
+  static Future<List<Map<String, Object?>>> totalblc() async {
+    Database db = await instance.database;
+    return await db.rawQuery('SELECT totalblc FROM groceriess WHERE mode = 1');
+  }
+
+  static Future<List<Map<String, Object?>>> paidblc() async {
+    Database db = await instance.database;
+    return await db.rawQuery('SELECT totalblc FROM groceriess WHERE mode = 0');
+  }
+
+  static Future<List<PartyModel>> getIncome() async {
+    Database db = await instance.database;
+    var groceries = await db.rawQuery('SELECT * FROM groceriess WHERE mode = 1');
+
+    List<PartyModel> groceryList = groceries.isNotEmpty ? groceries.map((c) => PartyModel.fromMap(c)).toList() : [];
+    return groceryList;
+  }
+
+  static Future<List<PartyModel>> getOutgoing() async {
+    Database db = await instance.database;
+    var groceries = await db.rawQuery('SELECT * FROM groceriess WHERE mode = 0');
+
+    List<PartyModel> groceryList = groceries.isNotEmpty ? groceries.map((c) => PartyModel.fromMap(c)).toList() : [];
+    return groceryList;
+  }
+
   Future<List<PartyModel>> getPartyName() async {
     Database db = await instance.database;
     var groceries = await db.query('groceriess', orderBy: 'name');
@@ -49,7 +75,7 @@ class DatabaseHelper {
     return await db.insert('groceriess', grocery.toMap());
   }
 
-  Future<int> deleteparty(int id) async {
+  static Future<int> deleteparty(int id) async {
     Database db = await instance.database;
     return await db.rawDelete('DELETE FROM groceriess WHERE id = $id');
   }
@@ -59,16 +85,8 @@ class DatabaseHelper {
     return await db.rawUpdate('UPDATE groceriess SET totalblc = $balance  where id = $id ');
   }
 
-  static Future<List<Map<String, dynamic>>> totalblc() async {
+  static Future<void> deleteDatabase() async {
     Database db = await instance.database;
-    return await db.rawQuery('SELECT totalblc FROM groceriess WHERE mode = 1');
-  }
-
-  static void deleteDatabase() async {
-    final appStorage = await getExternalStorageDirectory();
-
-    String path = join(appStorage!.path, 'groceriess.db');
-    databaseFactory.deleteDatabase(path);
-    print("deleted");
+    db.delete("groceriess");
   }
 }

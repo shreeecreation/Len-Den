@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:merokarobar/Database/database.dart';
 import 'package:merokarobar/Database/model.dart';
-import 'package:merokarobar/Login/Presentation/home.dart';
-import 'package:merokarobar/Theme/theme.dart';
+import 'package:merokarobar/ThemeManager/themeprovider.dart';
+import 'package:merokarobar/Utils/dialog.dart';
 
 // ignore: must_be_immutable
 class AddTodosOut extends StatelessWidget {
@@ -19,10 +19,12 @@ class AddTodosOut extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color? primaryColor = context.watch<ThemeProvider>().themecolor;
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Add New Party (Outgoing)"),
-          backgroundColor: CTheme.kPrimaryColor,
+          backgroundColor: primaryColor,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -38,7 +40,7 @@ class AddTodosOut extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 2,
-                    child: savebutton(context),
+                    child: savebutton(context, primaryColor),
                   ),
                 ],
               ),
@@ -47,11 +49,13 @@ class AddTodosOut extends StatelessWidget {
         ));
   }
 
-  Widget savebutton(BuildContext context) {
+  Widget savebutton(BuildContext context, var primaryColor) {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: CTheme.kPrimaryColor),
+        style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
         onPressed: () async {
           if (formGlobalKey.currentState!.validate() && formGlobalKey2.currentState!.validate()) {
+            Dialogs.showAlertDialog(context);
+
             formGlobalKey.currentState!.save();
             formGlobalKey2.currentState!.save();
             DateTime now = DateTime.now();
@@ -64,16 +68,6 @@ class AddTodosOut extends StatelessWidget {
                 date: formattedDate,
                 mode: 0,
                 totalblc: int.parse(openingBlc.text)));
-            await Future.delayed(const Duration(seconds: 1), () {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushAndRemoveUntil<dynamic>(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (BuildContext context) => const HomePage(),
-                    ),
-                    (route) => false);
-              });
-            });
           }
         },
         child: const Text("Save"));
@@ -214,6 +208,9 @@ class AddTodosOut extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                          ],
                           controller: phoneNo,
                           validator: (text) {
                             if (text == null || text.isEmpty) {
